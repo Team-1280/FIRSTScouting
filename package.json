@@ -1,0 +1,31 @@
+{
+    "name": "FIRSTScouting",
+    "version": "1.0.0",
+    "description": "FIRST Scouting Application for Team 1280",
+    "main": "index.js",
+    "repository": "https://github.com/Quantalabs/FIRSTScoutingApp",
+    "author": "<npm.quantalabs@gmail.com>",
+    "license": "GPL-3.0-or-later",
+    "packageManager": "yarn@3.6.3",
+    "engines": {
+        "node": ">=16.8.0",
+        "yarn": "^3.6.3"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^17.6.5",
+        "@commitlint/config-conventional": "^17.6.5",
+        "eslint": "^8.2.0",
+        "eslint-config-prettier": "^8.8.0",
+        "eslint-plugin-import": "^2.25.2",
+        "husky": "^8.0.3",
+        "prettier": "2.8.8"
+    },
+    "scripts": {
+        "prepare": "husky install",
+        "lint:check": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format:check": "prettier --check .",
+        "format:fix": "prettier --write .",
+        "postinstall": "husky install"
+    }
+}
