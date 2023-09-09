@@ -6,7 +6,6 @@
     "bin": {
         "scout": "src/index.js"
     },
-    "repository": "https://github.com/Quantalabs/FIRSTScoutingApp",
     "author": "<npm.quantalabs@gmail.com>",
     "license": "GPL-3.0-or-later",
     "packageManager": "yarn@3.6.3",

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>FIRST Scouting</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css"
+        />
+        <style>
+            @import "./style.css";
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>FIRST Scouting</h1>
+        </header>
+
+        <nav>
+            <a href="/">Scan</a>
+            <a href="/view">View</a>
+        </nav>
+        <br />
+
+        <div class="container">
+            <div id="reader"></div>
+        </div>
+
+        <script src="https://unpkg.com/html5-qrcode"></script>
+        <script>
+            async function fetchKeyNames() {
+                try {
+                    const response = await fetch("/keynames") // Replace with the actual URL
+                    if (response.ok) {
+                        const keyNames = await response.json()
+                        return keyNames
+                    } else {
+                        throw new Error("Failed to fetch key names")
+                    }
+                } catch (error) {
+                    console.error(error)
+                    return {}
+                }
+            }
+
+            async function onScanSuccess(decodedText, decodedResult) {
+                const data = decodedText
+                const keyNames = await fetchKeyNames()
+
+                // Split the data into individual key-value pairs
+                const pairs = data.split(";")
+
+                // Create an object to store the parsed key-value pairs
+                const parsedData = {}
+                pairs.forEach((pair) => {
+                    const [key, value] = pair.split("=")
+
+                    // Check if there's a key name mapping, if not, use the original key
+                    const updatedKey = keyNames[key] || key
+
+                    parsedData[updatedKey] = value
+                })
+
+                // URL encode the parsed data
+                const encodedData = new URLSearchParams(parsedData).toString()
+
+                // Construct the final URL parameters string
+                const baseUrl = "http://localhost:3000/data" // Replace with your server's URL
+                const finalUrl = `${baseUrl}?${encodedData}`
+
+                // Send the data to the server
+                fetch(finalUrl)
+
+                // Send user to /view
+                window.location.href = "/view"
+            }
+
+            function onScanFailure(error) {
+                return
+            }
+
+            let html5QrcodeScanner = new Html5QrcodeScanner(
+                "reader",
+                { fps: 10, qrbox: { width: 250, height: 250 } },
+                false
+            )
+            html5QrcodeScanner.render(onScanSuccess, onScanFailure)
+        </script>
+    </body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>FIRST Scouting</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css"
+        />
+        <style>
+            @import "./style.css";
+
+            /* Styling for the table */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                border: 1px solid #ccc;
+            }
+
+            th,
+            td {
+                padding: 8px;
+                text-align: left;
+                border: 1px solid;
+            }
+
+            /* Styling for the column selection checkboxes dropdown */
+            .column-container {
+                margin-bottom: 10px;
+                float: right;
+                width: 45%;
+            }
+
+            .filter-container {
+                float: left;
+                width: 45%;
+            }
+
+            /* Styling for the checkboxes */
+            .checkcontainer {
+                margin-right: 5px;
+                margin-bottom: 10px;
+                float: left;
+            }
+
+            /* Styling for the filter input fields */
+            .filter-input {
+                border-radius: 5px;
+                margin-bottom: 10px;
+                width: 22.5%;
+                float: left;
+            }
+
+            /* Styling for the dropdown containers */
+            .dropdown-container {
+                display: none;
+                margin-bottom: 10px;
+            }
+
+            /* Styling for the toggle buttons */
+            .toggle-button {
+                background-color: #444;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+
+            /* Styling for the visible dropdown containers */
+            .visible {
+                display: block;
+            }
+
+            /* Make filter-container and column-container stack on mobile */
+            @media screen and (max-width: 600px) {
+                .column-container {
+                    width: 100%;
+                }
+
+                .filter-container {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>FIRST Scouting</h1>
+        </header>
+
+        <nav>
+            <a href="/">Scan</a>
+            <a href="/view">View</a>
+        </nav>
+
+        <div class="container">
+            <table id="data"></table>
+        </div>
+
+        <div class="container">
+            <div id="filter"></div>
+        </div>
+
+        <script src="./view.js"></script>
+    </body>
+</html>
