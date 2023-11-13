@@ -25,7 +25,14 @@
         <br />
 
         <div class="container">
+            <button id="start">Scan</button>
             <div id="reader"></div>
+        </div>
+
+        <div class="container">
+            <h2>Enter Data</h2>
+            <input id="data" type="text" />
+            <button id="submitText">Submit</button>
         </div>
 
         <script src="https://unpkg.com/html5-qrcode"></script>
@@ -81,12 +88,53 @@
                 return
             }
 
-            let html5QrcodeScanner = new Html5QrcodeScanner(
-                "reader",
-                { fps: 10, qrbox: { width: 250, height: 250 } },
-                false
-            )
-            html5QrcodeScanner.render(onScanSuccess, onScanFailure)
+            document.getElementById("start").addEventListener("click", () => {
+                let html5QrcodeScanner = new Html5QrcodeScanner(
+                    "reader",
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    false
+                )
+                html5QrcodeScanner.render(onScanSuccess, onScanFailure)
+
+                document.getElementById("start").style.display = "none"
+            })
+
+            document
+                .getElementById("submitText")
+                .addEventListener("click", async () => {
+                    const data = document.getElementById("data").value
+
+                    const keyNames = await fetchKeyNames()
+
+                    // Split the data into individual key-value pairs
+                    const pairs = data.split(";")
+
+                    // Create an object to store the parsed key-value pairs
+                    const parsedData = {}
+                    pairs.forEach((pair) => {
+                        const [key, value] = pair.split("=")
+
+                        // Check if there's a key name mapping, if not, use the original key
+                        const updatedKey = keyNames[key] || key
+
+                        parsedData[updatedKey] = value
+                    })
+
+                    // URL encode the parsed data
+                    const encodedData = new URLSearchParams(
+                        parsedData
+                    ).toString()
+
+                    // Construct the final URL parameters string
+                    const baseUrl = "http://localhost:3000/data" // Replace with your server's URL
+                    const finalUrl = `${baseUrl}?${encodedData}`
+
+                    // Send the data to the server
+                    fetch(finalUrl)
+
+                    // Send user to /view
+                    window.location.href = "/view"
+                })
         </script>
     </body>
 </html>
