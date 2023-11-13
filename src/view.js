@@ -32,6 +32,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
             headers = Object.keys(rows[0])
 
+            for (let i = 0; i < headers.length; i++) {
+                headers[i] = headers[i]
+                    .split("-")
+                    .join(" ")
+                    .replace(/\w\S*/g, function (txt) {
+                        return (
+                            txt.charAt(0).toUpperCase() +
+                            txt.substr(1).toLowerCase()
+                        )
+                    })
+            }
+
             // Create table header with sorting indicators for specified columns
             const headerRow = document.createElement("tr")
             headers.forEach((header, index) => {
