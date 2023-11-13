@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Process ScoutingPASS data</title>
+        <meta name="description" content="Process scouting data">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
+        <link rel="stylesheet" href="../resources/css/normalize.css">
+        <link rel="stylesheet" href="./index.css">
+    </head>
+    <body>
+        <div id="externalContainer">
+            <p>
+                <a href='../index.html'>Match scouting</a> | 
+                <a href='../pit.html'>Pit scouting</a>
+            </p>
+        </div>
+        <h1>Paste data in here</h1>
+        <p>Separate entries with newlines</p>
+        <textarea id="pastebin"></textarea>
+        <button onclick="convert()">Convert</button>
+        <button id="copy" onclick="copy()">Copy</button>
+        <pre id="out">No data.</pre>
+        <script src="./index.js" async defer></script>
+    </body>
+</html>

@@ -1,0 +1,50 @@
+#externalContainer {
+    display: block;
+    width: 400px;
+    text-align: center;
+    background-color: #59c7;
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#externalContainer:hover {
+    background-color: #59c9;
+}
+
+body {
+    display: block;
+    width: max-content;
+    margin: auto;
+}
+
+#pastebin {
+    width: 450px;
+    height: 150px;
+    border: 3px solid var(--border);
+}
+
+button {
+    display: inline-block;
+    margin-top: 15px;
+}
+
+#out {
+    margin-top: 50px;
+    background-color: #ddd;
+    padding: 10px;
+    border-radius: 10px;
+    width: 450px;
+    white-space: pre-wrap;
+}
+
+#copy {
+    font-weight: bold;
+    background-color: #7a7;
+    color: white;
+}
+
+#copy:hover {
+    background-color: #696;
+}
