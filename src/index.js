@@ -78,7 +78,7 @@ server.listen(3000, () => {
 const finalhandler = require("finalhandler")
 const serveStatic = require("serve-static")
 
-const serve = serveStatic("./scoutingPASS/")
+const serve = serveStatic("./pass/")
 
 const scoutingPASSServer = http.createServer(function (req, res) {
     const done = finalhandler(req, res)
