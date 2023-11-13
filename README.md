@@ -1,20 +1,13 @@
-# Scouting Application
+# ![Logo](./images/C-Biscuit.png) Scouting
 
-An (unofficial) scouting application for team 1280.
+A(n unofficial) scouting application for Team 1280.
 
-## Usage
+## Setup
 
-Make sure you have nodejs installed, and run:
+Clone the git repo, run `yarn` to install dependencies, and then `node .` to host the server at http://localhost:3000. An instance of ScoutingPASS will run simultaneously at http://localhost:8000.
 
-```sh
-node .
-```
+## Screenshots/Videos
 
-Go to http://localhost:3000/ and upload an image of a qr code or scan one with your camera generated from https://github.com/PWNAGERobotics/ScoutingPASS and you'll be redirected to the data table. All data is logged in `data/data.json`. `data/key.json` contains a key of values for the qr code. For example the "s" value is the "scouter", or the "e" value is the "event", etc. The entire program works offline (as does ScoutingPASS). Because the data is stored in the JSON file, multiple scouters can scout at once, and the data can be combined at the end by just combining the JSON files, assuming they uset eh same key. If not, the keys can be combined easily.
-
-## TODO
-
--   [ ] Code alternative to ScoutingPASS, for faster data collection (or integrate ScoutingPASS)
--   [ ] Better website UI
--   [ ] Documentation?
--   [ ] Upload JSON from different Scouter to add to the database, or to replace existing data.
+![Screenshot of the data viewing page](./images/dataPage.png)
+![Screenshot of ScoutingPASS integration](./images/generatePage.png)
+![Demo GIF of the application](./images/demo.gif)
