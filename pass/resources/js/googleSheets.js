@@ -30,6 +30,6 @@ function setUpGoogleSheets() {
         console.log(fd)
 
         btn.disabled = false
-        btn.innerHTML = "Send to Google Sheets"
+        btn.innerHTML = "Send to Database"
     })
 }
