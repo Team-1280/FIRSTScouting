@@ -1,26 +1,35 @@
 function setUpGoogleSheets() {
-    const scriptURL = '<SCRIPT URL>'
-    const form = document.querySelector('#scoutingForm')
-    const btn = document.querySelector('#submit')
- 
-    
-    form.addEventListener('submit', e => {
-      e.preventDefault()
-      btn.disabled = true
-      btn.innerHTML = "Sending..."
+    const scriptURL = `http://${
+        window.location.hostname.split(":")[0]
+    }:3000/data`
+    const form = document.querySelector("#scoutingForm")
+    const btn = document.querySelector("#submit")
 
-      let fd = getData(false)
-      for (const [key, value] of fd) {
-        console.log(`${key}: ${value}\n`);
-      }
+    form.addEventListener("submit", (e) => {
+        e.preventDefault()
+        btn.disabled = true
+        btn.innerHTML = "Sending..."
 
-      fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: fd })
-        .then(response => { 
-              alert('Success!', response) })
-        .catch(error => {
-              alert('Error!', error.message)})
+        let pairs = getData(true).split(';')
 
-      btn.disabled = false
-      btn.innerHTML = "Send to Google Sheets"
+        const parsedData = {}
+        pairs.forEach((pair) => {
+          const [key, value] = pair.split("=")
+          parsedData[key] = value
+      })
+
+        // URL encode the parsed data
+        const fd = new URLSearchParams(
+            parsedData
+        ).toString()
+        
+        fetch(scriptURL + "?" + fd, {
+            mode: "no-cors"
+        })
+
+        console.log(fd)
+
+        btn.disabled = false
+        btn.innerHTML = "Send to Google Sheets"
     })
 }

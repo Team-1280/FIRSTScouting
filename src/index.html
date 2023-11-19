@@ -47,24 +47,8 @@
             // Add link to document
             document.getElementById("nav").appendChild(scoutpass)
 
-            async function fetchKeyNames() {
-                try {
-                    const response = await fetch("/keynames") // Replace with the actual URL
-                    if (response.ok) {
-                        const keyNames = await response.json()
-                        return keyNames
-                    } else {
-                        throw new Error("Failed to fetch key names")
-                    }
-                } catch (error) {
-                    console.error(error)
-                    return {}
-                }
-            }
-
             async function onScanSuccess(decodedText, decodedResult) {
                 const data = decodedText
-                const keyNames = await fetchKeyNames()
 
                 // Split the data into individual key-value pairs
                 const pairs = data.split(";")
@@ -73,11 +57,7 @@
                 const parsedData = {}
                 pairs.forEach((pair) => {
                     const [key, value] = pair.split("=")
-
-                    // Check if there's a key name mapping, if not, use the original key
-                    const updatedKey = keyNames[key] || key
-
-                    parsedData[updatedKey] = value
+                    parsedData[key] = value
                 })
 
                 // URL encode the parsed data
@@ -116,8 +96,6 @@
                 .addEventListener("click", async () => {
                     const data = document.getElementById("data").value
 
-                    const keyNames = await fetchKeyNames()
-
                     // Split the data into individual key-value pairs
                     const pairs = data.split(";")
 
@@ -126,10 +104,7 @@
                     pairs.forEach((pair) => {
                         const [key, value] = pair.split("=")
 
-                        // Check if there's a key name mapping, if not, use the original key
-                        const updatedKey = keyNames[key] || key
-
-                        parsedData[updatedKey] = value
+                        parsedData[key] = value
                     })
 
                     // URL encode the parsed data

@@ -11,6 +11,22 @@ document.addEventListener("DOMContentLoaded", function () {
     ]
 
     let headers = []
+    let keys = {}
+
+    let xhr = new XMLHttpRequest()
+    xhr.open("GET", "/keynames", false)
+
+    try {
+        xhr.send()
+        if (xhr.status != 200) {
+            alert(`Error ${xhr.status}: ${xhr.statusText}`)
+        } else {
+            keys = JSON.parse(xhr.responseText)
+        }
+    } catch (err) {
+        // instead of onerror
+        alert("Request failed")
+    }
 
     // Fetch JSON data from the /rawdata endpoint
     fetch("/rawdata")
@@ -31,9 +47,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             headers = Object.keys(rows[0])
-            ogheaders = Object.keys(rows[0])
-
+            let ogheaders = Object.keys(rows[0])
             for (let i = 0; i < headers.length; i++) {
+                if (Object.keys(keys).includes(headers[i])) {
+                    headers[i] = keys[headers[i]]
+                }
+
                 headers[i] = headers[i]
                     .split("-")
                     .join(" ")

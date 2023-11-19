@@ -10,7 +10,7 @@ document.addEventListener("touchend", moveTouch, false);
 var initialX = null;
 var xThreshold = 0.3;
 var slide = 0;
-var enableGoogleSheets = false;
+var enableGoogleSheets = true;
 var pitScouting = false;
 var checkboxAs = 'YN';
 
