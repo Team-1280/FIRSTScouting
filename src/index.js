@@ -4,9 +4,27 @@ const url = require("url")
 
 let host = "localhost"
 
-if (process.argv.length > 2) {
-    host = process.argv[2]
+if (process.argv.length < 3) {
+    throw new Error("Usage: node index.js <config> <host> <port>")
 }
+
+if (process.argv.length > 3) {
+    host = process.argv[3]
+}
+
+let config = process.argv[2]
+
+let stages = ["prematch", "auton", "teleop", "endgame"]
+const config_data = JSON.parse(fs.readFileSync(config, "utf8").split("`")[1])
+let key = {}
+
+for (let stage of stages) {
+    for (let field of config_data[stage]) {
+        key[field.code] = field.name.replace("<br>", " ")
+    }
+}
+
+fs.writeFileSync("data/key.json", JSON.stringify(key, null, 2))
 
 const server = http.createServer((req, res) => {
     const urlPath = url.parse(req.url).pathname

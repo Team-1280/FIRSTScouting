@@ -2,12 +2,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const table = document.getElementById("data")
     const filterDiv = document.getElementById("filter")
     let headersToShow = [
-        "Scouter",
+        "Scouter Initials",
         "Event",
-        "Level",
+        "Match Level",
         "Match #",
         "Robot",
-        "Team"
+        "Team #"
     ]
 
     let headers = []

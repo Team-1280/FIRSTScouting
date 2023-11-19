@@ -9,21 +9,27 @@ After cloning, run:
 ```
 yarn
 yarn build
-node .
+node . <ScoutPASS config file path> <host address>
+# eg. node . ./pass/2023/CU_config.js 192.168.0.174
 ```
 
 `yarn build` creates `data/data.json` and `data/key.json` (and a gitignore file). `data.json` stores the data, and `key.json` converts the data keys into a readable key. For example:
 
-```
+```json
 {
-    "s": "Scouter",
+    "s": "Scouter Initials",
     "e": "Event",
-    "l": "Level",
+    "l": "Match Level",
     "m": "Match #",
     "r": "Robot",
-    "t": "Team"
+    "t": "Team #",
+    .
+    .
+    .
 }
 ```
+
+`key.json` is automatically generated when you run the program, and you never need to edit it.
 
 ## Screenshots/Videos
 
