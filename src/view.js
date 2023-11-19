@@ -5,9 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
         "Scouter",
         "Event",
         "Level",
-        "Match",
+        "Match #",
         "Robot",
-        "Team #"
+        "Team"
     ]
 
     let headers = []
@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             headers = Object.keys(rows[0])
+            ogheaders = Object.keys(rows[0])
 
             for (let i = 0; i < headers.length; i++) {
                 headers[i] = headers[i]
@@ -60,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Create table rows with data for specified columns
             rows.forEach((rowData) => {
                 const row = document.createElement("tr")
-                headers.forEach((header) => {
+                ogheaders.forEach((header) => {
                     const cell = document.createElement("td")
                     cell.textContent = rowData[header]
                     row.appendChild(cell)

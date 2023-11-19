@@ -2,6 +2,12 @@ const http = require("http")
 const fs = require("fs")
 const url = require("url")
 
+let host = "localhost"
+
+if (process.argv.length > 2) {
+    host = process.argv[2]
+}
+
 const server = http.createServer((req, res) => {
     const urlPath = url.parse(req.url).pathname
 
@@ -71,8 +77,8 @@ const server = http.createServer((req, res) => {
     }
 })
 
-server.listen(3000, () => {
-    console.log("Website serving on http://localhost:3000")
+server.listen(3000, host, () => {
+    console.log(`Server running at http://${host}:3000/`)
 })
 
 const finalhandler = require("finalhandler")
@@ -85,4 +91,4 @@ const scoutingPASSServer = http.createServer(function (req, res) {
     serve(req, res, done)
 })
 
-scoutingPASSServer.listen(8000)
+scoutingPASSServer.listen(8000, host)

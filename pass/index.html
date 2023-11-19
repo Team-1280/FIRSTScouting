@@ -31,7 +31,7 @@
 			<div id="prematch" class="main-panel">
 				<div id="externalContainer">
 					<p>
-						<a href='http://localhost:3000/'>Process recorded data</a> | 
+						<a id="processData">Process recorded data</a> | 
 						<a href='pit.html'>Pit scouting</a>
 					</p>
 				</div>
@@ -140,6 +140,10 @@
 				<br>
 			</div>
 		</div>
+		<script>
+			let processLink = document.getElementById("processData");
+			processLink.href = `http://${window.location.host.split(":")[0] || "localhost"}:3000`;
+		</script>
 </body>
 </form>
 

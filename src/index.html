@@ -17,8 +17,7 @@
             <h1>FIRST Scouting</h1>
         </header>
 
-        <nav>
-            <a href="http://localhost:8000">Generate</a>
+        <nav id="nav">
             <a href="/">Scan</a>
             <a href="/view">View</a>
         </nav>
@@ -37,6 +36,17 @@
 
         <script src="https://unpkg.com/html5-qrcode"></script>
         <script>
+            // Create link element
+            const scoutpass = document.createElement("a")
+            scoutpass.href = `http://${
+                window.location.host.split(":")[0] || "localhost"
+            }:8000`
+            scoutpass.target = "_blank"
+            scoutpass.innerHTML = "Generate"
+
+            // Add link to document
+            document.getElementById("nav").appendChild(scoutpass)
+
             async function fetchKeyNames() {
                 try {
                     const response = await fetch("/keynames") // Replace with the actual URL
@@ -74,7 +84,9 @@
                 const encodedData = new URLSearchParams(parsedData).toString()
 
                 // Construct the final URL parameters string
-                const baseUrl = "http://localhost:3000/data" // Replace with your server's URL
+                const baseUrl = `http://${
+                    window.location.host.split(":")[0] || "localhost"
+                }:3000/data` // Replace with your server's URL
                 const finalUrl = `${baseUrl}?${encodedData}`
 
                 // Send the data to the server
@@ -126,7 +138,9 @@
                     ).toString()
 
                     // Construct the final URL parameters string
-                    const baseUrl = "http://localhost:3000/data" // Replace with your server's URL
+                    const baseUrl = `http://${
+                        window.location.host.split(":")[0] || "localhost"
+                    }:3000/data` // Replace with your server's URL
                     const finalUrl = `${baseUrl}?${encodedData}`
 
                     // Send the data to the server
