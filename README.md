@@ -4,7 +4,26 @@ A(n unofficial) scouting application for Team 1280.
 
 ## Setup
 
-Clone the git repo, run `yarn` to install dependencies, and then `node .` to host the server at http://localhost:3000. An instance of ScoutingPASS will run simultaneously at http://localhost:8000.
+After cloning, run:
+
+```
+yarn
+yarn build
+node .
+```
+
+`yarn build` creates `data/data.json` and `data/key.json` (and a gitignore file). `data.json` stores the data, and `key.json` converts the data keys into a readable key. For example:
+
+```
+{
+    "s": "Scouter",
+    "e": "Event",
+    "l": "Level",
+    "m": "Match #",
+    "r": "Robot",
+    "t": "Team"
+}
+```
 
 ## Screenshots/Videos
 
