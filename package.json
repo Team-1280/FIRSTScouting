@@ -30,7 +30,8 @@
         "format:fix": "prettier --write .",
         "postinstall": "husky install",
         "prepack": "pinst --disable",
-        "postpack": "pinst --enable"
+        "postpack": "pinst --enable",
+        "build": "node scripts/build.js"
     },
     "dependencies": {
         "finalhandler": "^1.2.0",
