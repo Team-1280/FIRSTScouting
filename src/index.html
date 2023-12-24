@@ -29,9 +29,18 @@
         </div>
 
         <div class="container">
+            <button id="bulkStart">Bulk Scan</button>
+            <div id="bulkReader"></div>
+        </div>
+
+        <div class="container">
             <h2>Enter Data</h2>
             <input id="data" type="text" />
             <button id="submitText">Submit</button>
+        </div>
+
+        <div class="container">
+            <button id="bulkGen">Generate Bulk</button>
         </div>
 
         <script src="https://unpkg.com/html5-qrcode"></script>
@@ -124,6 +133,66 @@
                     // Send user to /view
                     window.location.href = "/view"
                 })
+
+            async function onBulkScanSuccess(decodedText, decodedResult) {
+                const data = decodedText
+
+                // Split the data into individual key-value pairs
+                let pairs = data.split("/---/")
+                const parsedData = {}
+                for (let pair in pairs) {
+                    pairs[pair] = pairs[pair].split(";")
+
+                    parsedData[pair] = {}
+                    for (let key in pairs[pair]) {
+                        parsedData[pair][pairs[pair][key].split("=")[0]] =
+                            pairs[pair][key].split("=")[1]
+                    }
+                }
+
+                for (let pair in parsedData) {
+                    // URL encode the parsed data
+                    const encodedData = new URLSearchParams(
+                        parsedData[pair]
+                    ).toString()
+
+                    // Construct the final URL parameters string
+                    const baseUrl = `http://${
+                        window.location.host.split(":")[0] || "localhost"
+                    }:3000/data` // Replace with your server's URL
+                    const finalUrl = `${baseUrl}?${encodedData}`
+
+                    // Send the data to the server
+                    fetch(finalUrl)
+                }
+
+                // Send user to /view
+                window.location.href = "/view"
+            }
+
+            function onBulkScanFailure(error) {
+                return
+            }
+
+            document
+                .getElementById("bulkStart")
+                .addEventListener("click", () => {
+                    let html5QrcodeBulkScanner = new Html5QrcodeScanner(
+                        "bulkReader",
+                        { fps: 10, qrbox: { width: 250, height: 250 } },
+                        false
+                    )
+                    html5QrcodeBulkScanner.render(
+                        onBulkScanSuccess,
+                        onBulkScanFailure
+                    )
+
+                    document.getElementById("bulkStart").style.display = "none"
+                })
+
+            document.getElementById("bulkGen").addEventListener("click", () => {
+                window.location.href = "/bulk"
+            })
         </script>
     </body>
 </html>

@@ -1,5 +1,6 @@
 const http = require("http")
 const fs = require("fs")
+const QRCode = require("qrcode")
 const url = require("url")
 
 let host = "localhost"
@@ -88,6 +89,23 @@ const server = http.createServer((req, res) => {
                 res.write(data)
                 return res.end()
             })
+            break
+        case "/bulk":
+            // Generate a bulk QR code
+            let bulkData = ""
+            let rawData = JSON.parse(
+                fs.readFileSync("./data/data.json", "utf8")
+            )
+
+            for (let scout in rawData) {
+                for (let key in rawData[scout]) {
+                    bulkData += `${key}=${rawData[scout][key]};`
+                }
+                bulkData += "/---/"
+            }
+            // Remove the last /---/
+            bulkData = bulkData.slice(0, -5)
+            QRCode.toFileStream(res, bulkData)
             break
         default:
             // Handle default case or send a 404 response
