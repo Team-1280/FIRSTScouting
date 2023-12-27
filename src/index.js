@@ -190,4 +190,6 @@ const scoutingPASSServer = http.createServer(function (req, res) {
     serve(req, res, done)
 })
 
-scoutingPASSServer.listen(8000, host)
+scoutingPASSServer.listen(8000, host, () => {
+    console.log(`Scouting P.A.S.S. Server running at http://${host}:8000/`)
+})
