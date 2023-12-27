@@ -34,6 +34,7 @@
         "build": "node scripts/build.js"
     },
     "dependencies": {
+        "brotli-wasm": "^2.0.1",
         "finalhandler": "^1.2.0",
         "qrcode": "^1.5.3",
         "serve-static": "^1.15.0"

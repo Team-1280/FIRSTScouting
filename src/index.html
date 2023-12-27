@@ -137,34 +137,11 @@
             async function onBulkScanSuccess(decodedText, decodedResult) {
                 const data = decodedText
 
-                // Split the data into individual key-value pairs
-                let pairs = data.split("/---/")
-                const parsedData = {}
-                for (let pair in pairs) {
-                    pairs[pair] = pairs[pair].split(";")
-
-                    parsedData[pair] = {}
-                    for (let key in pairs[pair]) {
-                        parsedData[pair][pairs[pair][key].split("=")[0]] =
-                            pairs[pair][key].split("=")[1]
-                    }
-                }
-
-                for (let pair in parsedData) {
-                    // URL encode the parsed data
-                    const encodedData = new URLSearchParams(
-                        parsedData[pair]
-                    ).toString()
-
-                    // Construct the final URL parameters string
-                    const baseUrl = `http://${
-                        window.location.host.split(":")[0] || "localhost"
-                    }:3000/data` // Replace with your server's URL
-                    const finalUrl = `${baseUrl}?${encodedData}`
-
-                    // Send the data to the server
-                    fetch(finalUrl)
-                }
+                // Send the data to the server
+                const baseUrl = `http://${
+                    window.location.host.split(":")[0] || "localhost"
+                }:3000/receiveBulk?data=${data}` // Replace with your server's URL
+                fetch(baseUrl)
 
                 // Send user to /view
                 window.location.href = "/view"

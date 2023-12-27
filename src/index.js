@@ -2,6 +2,7 @@ const http = require("http")
 const fs = require("fs")
 const QRCode = require("qrcode")
 const url = require("url")
+const brotli = require("brotli-wasm")
 
 let host = "localhost"
 
@@ -101,11 +102,40 @@ const server = http.createServer((req, res) => {
                 for (let key in rawData[scout]) {
                     bulkData += `${key}=${rawData[scout][key]};`
                 }
-                bulkData += "/---/"
+                bulkData += "//"
             }
-            // Remove the last /---/
-            bulkData = bulkData.slice(0, -5)
-            QRCode.toFileStream(res, bulkData)
+            // Remove the last //
+            bulkData = bulkData.slice(0, -2)
+            let brotliData = brotli.compress(Buffer.from(bulkData), {
+                quality: 11
+            })
+            QRCode.toFileStream(res, Buffer.from(brotliData).toString("hex"))
+            break
+        case "/receiveBulk":
+            let receivedData = url.parse(req.url, true).query.data
+            let compressedData = new Uint8Array(
+                receivedData.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+            )
+            let decompressedData = Buffer.from(
+                brotli.decompress(compressedData)
+            ).toString("utf8")
+            let entries = decompressedData.split("//")
+            for (let entry of entries) {
+                if (entry != "") {
+                    let fields = entry.split(";")
+                    let data = require("../data/data.json")
+                    let index = Object.keys(data).length.toString()
+                    data[index] = {}
+                    for (let field of fields) {
+                        let [key, value] = field.split("=")
+                        data[index][key] = value
+                    }
+                    fs.writeFileSync(
+                        "./data/data.json",
+                        JSON.stringify(data, null, 2)
+                    )
+                }
+            }
             break
         default:
             // Handle default case or send a 404 response
