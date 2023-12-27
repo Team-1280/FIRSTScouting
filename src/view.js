@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
         "Match Level",
         "Match #",
         "Robot",
-        "Team #"
+        "Team #",
+        "Bulk Export"
     ]
 
     let headers = []
@@ -48,6 +49,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             headers = Object.keys(rows[0])
             let ogheaders = Object.keys(rows[0])
+            ogheaders.push("bulk-export")
+            headers.push("bulk-export")
             for (let i = 0; i < headers.length; i++) {
                 if (Object.keys(keys).includes(headers[i])) {
                     headers[i] = keys[headers[i]]
@@ -78,12 +81,28 @@ document.addEventListener("DOMContentLoaded", function () {
             table.appendChild(headerRow)
 
             // Create table rows with data for specified columns
-            rows.forEach((rowData) => {
+            rows.forEach((rowData, index) => {
                 const row = document.createElement("tr")
                 ogheaders.forEach((header) => {
-                    const cell = document.createElement("td")
-                    cell.textContent = rowData[header]
-                    row.appendChild(cell)
+                    if (rowData[header]) {
+                        const cell = document.createElement("td")
+                        cell.textContent = rowData[header]
+                        row.appendChild(cell)
+                    } else if (header == "bulk-export") {
+                        const cell = document.createElement("td")
+                        const checkbox = document.createElement("input")
+                        checkbox.type = "checkbox"
+                        checkbox.addEventListener("change", () => {
+                            checkbox.classList.toggle("bulkChecked")
+                        })
+                        checkbox.id = `bulkCheckbox${index}`
+                        checkbox.classList.add("bulkChecks")
+                        cell.appendChild(checkbox)
+                        const label = document.createElement("label")
+                        label.htmlFor = `bulkCheckbox${index}`
+                        cell.appendChild(label)
+                        row.appendChild(cell)
+                    }
                 })
                 table.appendChild(row)
             })
@@ -246,4 +265,14 @@ document.addEventListener("DOMContentLoaded", function () {
             isAscending ? "⬆" : "⬇"
         }`
     }
+})
+
+document.getElementById("bulkGen").addEventListener("click", () => {
+    let bulkChecked = document.getElementsByClassName("bulkChecked")
+    let rows = []
+    for (let check of bulkChecked) {
+        rows.push(check.id.replace("bulkCheckbox", ""))
+    }
+    let url = `/semiBulk?rows=${rows.join(",")}`
+    window.location.href = url
 })

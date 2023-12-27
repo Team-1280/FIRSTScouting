@@ -30,6 +30,7 @@ fs.writeFileSync("data/key.json", JSON.stringify(key, null, 2))
 
 const server = http.createServer((req, res) => {
     const urlPath = url.parse(req.url).pathname
+    let rawData = JSON.parse(fs.readFileSync("./data/data.json", "utf8"))
 
     switch (urlPath) {
         case "/":
@@ -75,6 +76,14 @@ const server = http.createServer((req, res) => {
                 return res.end()
             })
             break
+        case "/C-Biscuit.png":
+            fs.readFile("./src/C-Biscuit.png", (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "image/png" })
+                res.write(data)
+                return res.end()
+            })
+            break
         case "/keynames":
             fs.readFile("./data/key.json", (err, data) => {
                 if (err) throw err
@@ -94,9 +103,6 @@ const server = http.createServer((req, res) => {
         case "/bulk":
             // Generate a bulk QR code
             let bulkData = ""
-            let rawData = JSON.parse(
-                fs.readFileSync("./data/data.json", "utf8")
-            )
 
             for (let scout in rawData) {
                 for (let key in rawData[scout]) {
@@ -136,6 +142,25 @@ const server = http.createServer((req, res) => {
                     )
                 }
             }
+            break
+        case "/semiBulk":
+            let rows = url.parse(req.url, true).query.rows.split(",")
+            let semiBulkData = ""
+
+            for (let row of rows) {
+                for (let key in rawData[row]) {
+                    semiBulkData += `${key}=${rawData[row][key]};`
+                }
+                semiBulkData += "//"
+            }
+            semiBulkData = semiBulkData.slice(0, -2)
+            brotliSemiData = brotli.compress(Buffer.from(semiBulkData), {
+                quality: 11
+            })
+            QRCode.toFileStream(
+                res,
+                Buffer.from(brotliSemiData).toString("hex")
+            )
             break
         default:
             // Handle default case or send a 404 response

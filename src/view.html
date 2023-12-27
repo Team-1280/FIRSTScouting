@@ -83,8 +83,29 @@
                     width: 100%;
                 }
             }
+
+            /* Make .bulkChecks checkboxes show image when checked instead of checkmark */
+            .bulkChecks {
+                display: none;
+            }
+
+            .bulkChecks + label {
+                background: #999;
+                height: 16px;
+                width: 16px;
+                display: inline-block;
+                padding: 0 0 0 0px;
+            }
+            .bulkChecks:checked + label {
+                background: center / contain no-repeat url("./C-Biscuit.png");
+                height: 16px;
+                width: 16px;
+                display: inline-block;
+                padding: 0 0 0 0px;
+            }
         </style>
     </head>
+
     <body>
         <header>
             <h1>FIRST Scouting</h1>
@@ -101,6 +122,10 @@
 
         <div class="container">
             <div id="filter"></div>
+        </div>
+
+        <div class="container">
+            <button id="bulkGen">Generate Bulk</button>
         </div>
 
         <script src="./view.js"></script>
