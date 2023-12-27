@@ -84,11 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
             rows.forEach((rowData, index) => {
                 const row = document.createElement("tr")
                 ogheaders.forEach((header) => {
-                    if (rowData[header]) {
-                        const cell = document.createElement("td")
-                        cell.textContent = rowData[header]
-                        row.appendChild(cell)
-                    } else if (header == "bulk-export") {
+                    if (header == "bulk-export") {
                         const cell = document.createElement("td")
                         const checkbox = document.createElement("input")
                         checkbox.type = "checkbox"
@@ -101,6 +97,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         const label = document.createElement("label")
                         label.htmlFor = `bulkCheckbox${index}`
                         cell.appendChild(label)
+                        row.appendChild(cell)
+                    } else {
+                        const cell = document.createElement("td")
+                        cell.textContent = rowData[header]
                         row.appendChild(cell)
                     }
                 })

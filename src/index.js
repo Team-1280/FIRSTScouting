@@ -92,10 +92,18 @@ const server = http.createServer((req, res) => {
                 return res.end()
             })
             break
-        case "/style.css":
-            fs.readFile("./src/style.css", (err, data) => {
+        case "/water.css":
+            fs.readFile("./src/water.css", (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { "Content-Type": "text/css" })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case "/html5-qrcode.min.js":
+            fs.readFile("./src/html5-qrcode.min.js", (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "text/js" })
                 res.write(data)
                 return res.end()
             })
