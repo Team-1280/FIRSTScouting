@@ -170,6 +170,149 @@ const server = http.createServer((req, res) => {
                 Buffer.from(brotliSemiData).toString("hex")
             )
             break
+        case "/analysis":
+            fs.readFile("./src/analysis.html", (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "text/html" })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case "/analysis.js":
+            fs.readFile("./src/analysis.js", (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "text/javascript" })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case "/teams":
+            // Get all games with each team
+            let teams = JSON.parse(url.parse(req.url, true).query.teams)
+
+            let averages = [
+                ["docking-timer", "Docking Time"],
+                ["cone-count", "Cones"],
+                ["cube-count", "Cubes"],
+                ["links-scored", "Links"],
+                ["speed", "Speed"],
+                ["defense", "Defense"],
+                ["alliance", "Alliance"]
+            ]
+
+            let teamData = {
+                r: {
+                    1: {
+                        team: teams.r[0],
+                        games: [],
+                        averages: {}
+                    },
+                    2: {
+                        team: teams.r[1],
+                        games: [],
+                        averages: {}
+                    },
+                    3: {
+                        team: teams.r[2],
+                        games: [],
+                        averages: {}
+                    },
+                    overall: {}
+                },
+                b: {
+                    1: {
+                        team: teams.b[0],
+                        games: [],
+                        averages: {}
+                    },
+                    2: {
+                        team: teams.b[1],
+                        games: [],
+                        averages: {}
+                    },
+                    3: {
+                        team: teams.b[2],
+                        games: [],
+                        averages: {}
+                    },
+                    overall: {}
+                }
+            }
+            for (let game in Object.keys(rawData)) {
+                for (var team = 0; team < 3; team++) {
+                    if (rawData[game]["t"] == teams.r[team]) {
+                        teamData["r"][team + 1]["games"].push(rawData[game])
+                    }
+                    if (rawData[game]["t"] == teams.b[team]) {
+                        teamData["b"][team + 1]["games"].push(rawData[game])
+                    }
+                }
+            }
+
+            for (let alliance in teamData) {
+                for (let team in teamData[alliance]) {
+                    if (team == "overall") continue
+
+                    let data = {
+                        "docking-timer": [],
+                        "cone-count": [],
+                        "cube-count": [],
+                        "links-scored": [],
+                        speed: [],
+                        defense: [],
+                        alliance: []
+                    }
+                    for (let game in teamData[alliance][team]["games"]) {
+                        for (let average of averages) {
+                            let value =
+                                teamData[alliance][team]["games"][game][
+                                    average[0]
+                                ]
+                            if (
+                                [
+                                    "x",
+                                    "below-avg",
+                                    "avg",
+                                    "good",
+                                    "excellent"
+                                ].includes(value)
+                            ) {
+                                data[average[0]].push(
+                                    [
+                                        "x",
+                                        "below-avg",
+                                        "avg",
+                                        "good",
+                                        "excellent"
+                                    ].indexOf(value)
+                                )
+                            } else if (value == "N" || value == "Y") {
+                                data[average[0]].push(value == "N" ? 0 : 1)
+                            } else if (!isNaN(value)) {
+                                data[average[0]].push(Number(value))
+                            } else {
+                                console.log(value)
+                                throw new Error(
+                                    `Unknown type: ${value} \n Should be number; one of ['x', 'below-avg', 'avg', 'good', 'excellent']; one of 'N' or 'Y'`
+                                )
+                            }
+                        }
+                    }
+                    // Calculate averages
+                    for (let average in averages) {
+                        Object.assign(teamData[alliance][team]["averages"], {
+                            [averages[average][1]]:
+                                data[averages[average][0]].reduce(
+                                    (a, b) => a + b
+                                ) / data[averages[average][0]].length
+                        })
+                    }
+                }
+            }
+
+            res.writeHead(200, { "Content-Type": "application/json" })
+            res.end(JSON.stringify(teamData))
+            break
         default:
             // Handle default case or send a 404 response
             break
