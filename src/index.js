@@ -16,17 +16,7 @@ if (process.argv.length > 3) {
 
 let config = process.argv[2]
 
-let stages = ["prematch", "auton", "teleop", "endgame"]
-const config_data = JSON.parse(fs.readFileSync(config, "utf8").split("`")[1])
-let key = {}
-
-for (let stage of stages) {
-    for (let field of config_data[stage]) {
-        key[field.code] = field.name.replace("<br>", " ")
-    }
-}
-
-fs.writeFileSync("data/key.json", JSON.stringify(key, null, 2))
+const config_data = JSON.parse(fs.readFileSync(config, "utf8"))
 
 const server = http.createServer((req, res) => {
     const urlPath = url.parse(req.url).pathname
@@ -68,137 +58,11 @@ const server = http.createServer((req, res) => {
                 return res.end()
             })
             break
-        case "/view.js":
-            fs.readFile("./src/view.js", (err, data) => {
-                if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/javascript" })
-                res.write(data)
-                return res.end()
-            })
-            break
-        case "/C-Biscuit.png":
-            fs.readFile("./src/C-Biscuit.png", (err, data) => {
-                if (err) throw err
-                res.writeHead(200, { "Content-Type": "image/png" })
-                res.write(data)
-                return res.end()
-            })
-            break
-        case "/keynames":
-            fs.readFile("./data/key.json", (err, data) => {
-                if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/plain" })
-                res.write(data)
-                return res.end()
-            })
-            break
-        case "/water.css":
-            fs.readFile("./src/water.css", (err, data) => {
-                if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/css" })
-                res.write(data)
-                return res.end()
-            })
-            break
-        case "/html5-qrcode.min.js":
-            fs.readFile("./src/html5-qrcode.min.js", (err, data) => {
-                if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/js" })
-                res.write(data)
-                return res.end()
-            })
-            break
-        case "/bulk":
-            // Generate a bulk QR code
-            let bulkData = ""
-
-            for (let scout in rawData) {
-                for (let key in rawData[scout]) {
-                    bulkData += `${key}=${rawData[scout][key]};`
-                }
-                bulkData += "//"
-            }
-            // Remove the last //
-            bulkData = bulkData.slice(0, -2)
-            let brotliData = brotli.compress(Buffer.from(bulkData), {
-                quality: 11
-            })
-            QRCode.toFileStream(res, Buffer.from(brotliData).toString("hex"))
-            break
-        case "/receiveBulk":
-            let receivedData = url.parse(req.url, true).query.data
-            let compressedData = new Uint8Array(
-                receivedData.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
-            )
-            let decompressedData = Buffer.from(
-                brotli.decompress(compressedData)
-            ).toString("utf8")
-            let entries = decompressedData.split("//")
-            for (let entry of entries) {
-                if (entry != "") {
-                    let fields = entry.split(";")
-                    let data = require("../data/data.json")
-                    let index = Object.keys(data).length.toString()
-                    data[index] = {}
-                    for (let field of fields) {
-                        let [key, value] = field.split("=")
-                        data[index][key] = value
-                    }
-                    fs.writeFileSync(
-                        "./data/data.json",
-                        JSON.stringify(data, null, 2)
-                    )
-                }
-            }
-            break
-        case "/semiBulk":
-            let rows = url.parse(req.url, true).query.rows.split(",")
-            let semiBulkData = ""
-
-            for (let row of rows) {
-                for (let key in rawData[row]) {
-                    semiBulkData += `${key}=${rawData[row][key]};`
-                }
-                semiBulkData += "//"
-            }
-            semiBulkData = semiBulkData.slice(0, -2)
-            brotliSemiData = brotli.compress(Buffer.from(semiBulkData), {
-                quality: 11
-            })
-            QRCode.toFileStream(
-                res,
-                Buffer.from(brotliSemiData).toString("hex")
-            )
-            break
-        case "/analysis":
-            fs.readFile("./src/analysis.html", (err, data) => {
-                if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/html" })
-                res.write(data)
-                return res.end()
-            })
-            break
-        case "/analysis.js":
-            fs.readFile("./src/analysis.js", (err, data) => {
-                if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/javascript" })
-                res.write(data)
-                return res.end()
-            })
-            break
         case "/teams":
             // Get all games with each team
             let teams = JSON.parse(url.parse(req.url, true).query.teams)
 
-            let averages = [
-                ["docking-timer", "Docking Time"],
-                ["cone-count", "Cones"],
-                ["cube-count", "Cubes"],
-                ["links-scored", "Links"],
-                ["speed", "Speed"],
-                ["defense", "Defense"],
-                ["alliance", "Alliance"]
-            ]
+            let averages = config_data["averages"]
 
             let teamData = {
                 r: {
@@ -237,7 +101,10 @@ const server = http.createServer((req, res) => {
                     },
                     overall: {}
                 },
-                noGames: []
+                noGames: [],
+                weights: {
+                    ...config_data["weights"]
+                }
             }
 
             for (let game in Object.keys(rawData)) {
@@ -252,18 +119,16 @@ const server = http.createServer((req, res) => {
             }
 
             for (let alliance in teamData) {
-                if (alliance == "noGames") continue
+                if (alliance == "noGames" || alliance == "weights") continue
                 for (let team in teamData[alliance]) {
                     if (team == "overall") continue
 
-                    let data = {
-                        "docking-timer": [],
-                        "cone-count": [],
-                        "cube-count": [],
-                        "links-scored": [],
-                        speed: [],
-                        defense: [],
-                        alliance: []
+                    let data = {}
+
+                    for (let average of averages) {
+                        Object.assign(data, {
+                            [average[0]]: []
+                        })
                     }
 
                     if (teamData[alliance][team]["games"].length == 0) {
@@ -336,6 +201,126 @@ const server = http.createServer((req, res) => {
 
             res.writeHead(200, { "Content-Type": "application/json" })
             res.end(JSON.stringify(teamData))
+            break
+        case "/analysis":
+            fs.readFile("./src/analysis.html", (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "text/html" })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case "/bulk":
+            // Generate a bulk QR code
+            let bulkData = ""
+
+            for (let scout in rawData) {
+                for (let key in rawData[scout]) {
+                    bulkData += `${key}=${rawData[scout][key]};`
+                }
+                bulkData += "//"
+            }
+            // Remove the last //
+            bulkData = bulkData.slice(0, -2)
+            let brotliData = brotli.compress(Buffer.from(bulkData), {
+                quality: 11
+            })
+            QRCode.toFileStream(res, Buffer.from(brotliData).toString("hex"))
+            break
+        case "/receiveBulk":
+            let receivedData = url.parse(req.url, true).query.data
+            let compressedData = new Uint8Array(
+                receivedData.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+            )
+            let decompressedData = Buffer.from(
+                brotli.decompress(compressedData)
+            ).toString("utf8")
+            let entries = decompressedData.split("//")
+            for (let entry of entries) {
+                if (entry != "") {
+                    let fields = entry.split(";")
+                    let data = require("../data/data.json")
+                    let index = Object.keys(data).length.toString()
+                    data[index] = {}
+                    for (let field of fields) {
+                        let [key, value] = field.split("=")
+                        data[index][key] = value
+                    }
+                    fs.writeFileSync(
+                        "./data/data.json",
+                        JSON.stringify(data, null, 2)
+                    )
+                }
+            }
+            break
+        case "/semiBulk":
+            let rows = url.parse(req.url, true).query.rows.split(",")
+            let semiBulkData = ""
+
+            for (let row of rows) {
+                for (let key in rawData[row]) {
+                    semiBulkData += `${key}=${rawData[row][key]};`
+                }
+                semiBulkData += "//"
+            }
+            semiBulkData = semiBulkData.slice(0, -2)
+            brotliSemiData = brotli.compress(Buffer.from(semiBulkData), {
+                quality: 11
+            })
+            QRCode.toFileStream(
+                res,
+                Buffer.from(brotliSemiData).toString("hex")
+            )
+            break
+        case "/keynames":
+            res.writeHead(200, { "Content-Type": "text/plain" })
+            res.write(
+                JSON.stringify({
+                    keys: config_data["keys"],
+                    headers: config_data["headers"]
+                })
+            )
+            res.end()
+            break
+        case "/view.js":
+            fs.readFile("./src/view.js", (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "text/javascript" })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case "/C-Biscuit.png":
+            fs.readFile("./src/C-Biscuit.png", (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "image/png" })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case "/water.css":
+            fs.readFile("./src/water.css", (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "text/css" })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case "/html5-qrcode.min.js":
+            fs.readFile("./src/html5-qrcode.min.js", (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "text/js" })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case "/analysis.js":
+            fs.readFile("./src/analysis.js", (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "text/javascript" })
+                res.write(data)
+                return res.end()
+            })
             break
         default:
             res.writeHead(404)

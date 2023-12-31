@@ -1,17 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     const table = document.getElementById("data")
     const filterDiv = document.getElementById("filter")
-    let headersToShow = [
-        "Scouter Initials",
-        "Event",
-        "Match Level",
-        "Match #",
-        "Robot",
-        "Team #",
-        "Bulk Export"
-    ]
 
     let headers = []
+    let headersToShow = []
     let keys = {}
 
     let xhr = new XMLHttpRequest()
@@ -22,7 +14,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (xhr.status != 200) {
             alert(`Error ${xhr.status}: ${xhr.statusText}`)
         } else {
-            keys = JSON.parse(xhr.responseText)
+            keys = JSON.parse(xhr.responseText)["keys"]
+            headersToShow = JSON.parse(xhr.responseText)["headers"]
         }
     } catch (err) {
         // instead of onerror

@@ -100,14 +100,7 @@ document
 
                 wp = 0
                 nf = 0
-                wpWeights = {
-                    "Docking Time": -0.1,
-                    Cones: 0.3,
-                    Cubes: 0.15,
-                    Links: 0.25,
-                    Speed: 0.2,
-                    Defense: 0.1
-                }
+                wpWeights = data["weights"]
 
                 for (let average in data["b"]["overall"]) {
                     if (average.endsWith("list")) continue
