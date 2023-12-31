@@ -25,11 +25,35 @@ document
         let data = fetch("/teams?teams=" + JSON.stringify(teams))
             .then((response) => response.json())
             .then((data) => {
+                console.log(data)
                 document.getElementById("redPredictions").innerHTML = ""
                 document.getElementById("bluePredictions").innerHTML = ""
 
-                let rPreHTML = ""
-                let bPreHTML = ""
+                let rPreHTML = "<div id='rNoGames'>"
+                let bPreHTML = "<div id='bNoGames'>"
+
+                if (data["noGames"].length > 0) {
+                    // Find teams corresponding alliances
+                    let noGames = data["noGames"]
+                    for (let team of noGames) {
+                        if (teams.r.includes(team)) {
+                            rPreHTML +=
+                                "<strong>Team " +
+                                team +
+                                " has no games</strong><br>"
+                        } else if (teams.b.includes(team)) {
+                            bPreHTML +=
+                                "<strong>Team " +
+                                team +
+                                " has no games</strong><br>"
+                        }
+                    }
+                }
+
+                rPreHTML +=
+                    "</div><div style='display:flex;justify-content:center;'>"
+                bPreHTML +=
+                    "</div><div style='display:flex;justify-content:center;'>"
 
                 for (let i = 1; i <= 3; i++) {
                     let r = data["r"][i]
@@ -55,6 +79,8 @@ document
                             ": " +
                             r["averages"][average] +
                             "</li>"
+                    }
+                    for (let average in b["averages"]) {
                         bPreHTML +=
                             "<li> Avg. " +
                             average +
@@ -67,7 +93,85 @@ document
                     bPreHTML += "</ul></div>"
                 }
 
+                rPreHTML +=
+                    "</div><h3 style='text-align:center'>Alliance Stats</h3><div id='rAllianceStats'><div>"
+                bPreHTML +=
+                    "</div><h3 style='text-align:center'>Alliance Stats</h3><div id='bAllianceStats'><div>"
+
+                wp = 0
+                nf = 0
+                wpWeights = {
+                    "Docking Time": -0.1,
+                    Cones: 0.3,
+                    Cubes: 0.15,
+                    Links: 0.25,
+                    Speed: 0.2,
+                    Defense: 0.1
+                }
+
+                for (let average in data["b"]["overall"]) {
+                    if (average.endsWith("list")) continue
+
+                    bPreHTML +=
+                        "<li> Avg. " +
+                        average +
+                        ": " +
+                        Math.round(
+                            Number(data["b"]["overall"][average]) * 100
+                        ) /
+                            100 +
+                        "</li>"
+
+                    rPreHTML +=
+                        "<li> Avg. " +
+                        average +
+                        ": " +
+                        Math.round(
+                            Number(data["r"]["overall"][average]) * 100
+                        ) /
+                            100 +
+                        "</li>"
+
+                    wp += wpWeights[average]
+                        ? wpWeights[average] *
+                          (Number(data["b"]["overall"][average]) -
+                              Number(data["r"]["overall"][average]))
+                        : 0
+                }
+                let bwp =
+                    Math.round((1 / (1 + Math.pow(Math.E, -wp))) * 10000) /
+                    10000
+                let rwp = 1 - bwp
+
+                rPreHTML += `</div>
+                <div class='progress-container'>
+                    <h4>Win Probability</h4>
+                    <div class='progress-bar'>
+                        <div data-size='${rwp * 100}' class='progress'>${
+                    rwp * 100
+                }%</div>
+                    </div>
+                    </div>
+                </div>`
+                bPreHTML += `</div>
+                <div class='progress-container'>
+                    <h4>Win Probability</h4>
+                    <div class='progress-bar'>
+                        <div data-size='${bwp * 100}' class='progress'>${
+                    bwp * 100
+                }%</div>
+                    </div>
+                    </div>
+                </div>`
+
                 document.getElementById("redPredictions").innerHTML = rPreHTML
                 document.getElementById("bluePredictions").innerHTML = bPreHTML
+
+                const progress_bars = document.querySelectorAll(".progress")
+
+                progress_bars.forEach((bar) => {
+                    const { size } = bar.dataset
+                    bar.style.width = `${size}%`
+                })
             })
     })

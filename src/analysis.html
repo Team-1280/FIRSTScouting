@@ -7,6 +7,32 @@
         <style>
             @import "./water.css";
 
+            .progress-bar {
+                height: 2rem;
+                border-radius: 3px;
+                width: 100%;
+                background: #969090;
+            }
+
+            .progress-container {
+                width: 25%;
+                text-align: center;
+            }
+
+            .progress-bar .progress {
+                height: 100%;
+                background: #ff4754;
+                transition: width 0.4s ease;
+            }
+
+            .progress {
+                border-radius: 3px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 0 !important;
+            }
+
             /** Put blue alliance and red alliance side by side */
             #alliances {
                 display: flex;
@@ -16,6 +42,12 @@
             #blueAlliance,
             #redAlliance {
                 margin: 1em;
+            }
+
+            #blue h3,
+            #red h3 {
+                margin: 1em;
+                text-align: center;
             }
 
             /* Style the buttons inside the tab */
@@ -35,14 +67,19 @@
                 display: none;
             }
 
-            #redPredictions,
-            #bluePredictions {
-                display: flex;
-            }
-
             #redPredictions div,
             #bluePredictions div {
                 margin: 10px;
+            }
+
+            #rAllianceStats,
+            #bAllianceStats {
+                display: flex;
+                justify-content: center;
+            }
+
+            .team h3 {
+                text-align: center;
             }
         </style>
     </head>
@@ -62,7 +99,7 @@
             <h2>Predictions</h2>
             <form id="alliances">
                 <div id="blueAlliance">
-                    <h3>Blue Alliance</h3>
+                    <h3 style="text-align: center">Blue Alliance</h3>
                     <label for="blue1">Blue 1</label>
                     <input type="number" name="blue1" id="blue1" />
                     <label for="blue2">Blue 2</label>
@@ -71,7 +108,7 @@
                     <input type="number" name="blue3" id="blue3" />
                 </div>
                 <div id="redAlliance">
-                    <h3>Red Alliance</h3>
+                    <h3 style="text-align: center">Red Alliance</h3>
                     <label for="red1">Red 1</label>
                     <input type="number" name="red1" id="red1" />
                     <label for="red2">Red 2</label>

@@ -236,8 +236,10 @@ const server = http.createServer((req, res) => {
                         averages: {}
                     },
                     overall: {}
-                }
+                },
+                noGames: []
             }
+
             for (let game in Object.keys(rawData)) {
                 for (var team = 0; team < 3; team++) {
                     if (rawData[game]["t"] == teams.r[team]) {
@@ -250,6 +252,7 @@ const server = http.createServer((req, res) => {
             }
 
             for (let alliance in teamData) {
+                if (alliance == "noGames") continue
                 for (let team in teamData[alliance]) {
                     if (team == "overall") continue
 
@@ -262,6 +265,14 @@ const server = http.createServer((req, res) => {
                         defense: [],
                         alliance: []
                     }
+
+                    if (teamData[alliance][team]["games"].length == 0) {
+                        teamData["noGames"].push(
+                            teamData[alliance][team]["team"]
+                        )
+                        continue
+                    }
+
                     for (let game in teamData[alliance][team]["games"]) {
                         for (let average of averages) {
                             let value =
@@ -299,12 +310,25 @@ const server = http.createServer((req, res) => {
                         }
                     }
                     // Calculate averages
-                    for (let average in averages) {
+                    for (let average of averages) {
                         Object.assign(teamData[alliance][team]["averages"], {
-                            [averages[average][1]]:
-                                data[averages[average][0]].reduce(
-                                    (a, b) => a + b
-                                ) / data[averages[average][0]].length
+                            [average[1]]:
+                                data[average[0]].reduce((a, b) => a + b) /
+                                data[average[0]].length
+                        })
+
+                        let current = teamData[alliance]["overall"][
+                            average[1] + "list"
+                        ]
+                            ? teamData[alliance]["overall"][average[1] + "list"]
+                            : []
+
+                        current.push(...data[average[0]])
+
+                        Object.assign(teamData[alliance]["overall"], {
+                            [average[1] + "list"]: current,
+                            [average[1]]:
+                                current.reduce((a, b) => a + b) / current.length
                         })
                     }
                 }
@@ -314,7 +338,8 @@ const server = http.createServer((req, res) => {
             res.end(JSON.stringify(teamData))
             break
         default:
-            // Handle default case or send a 404 response
+            res.writeHead(404)
+            res.end()
             break
     }
 })
