@@ -1466,15 +1466,6 @@ window.onload = function () {
     }
 
     // Register service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./serviceWorker.js', { scope: '.' })
-        .then(function (registration) {
-          // Registration was successful
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }).catch(function (err) {
-          // Registration failed
-          console.log('(!) ServiceWorker registration failed: ', err);
-        });
-    }
+    navigator.serviceWorker && navigator.serviceWorker.register('./serviceWorker.js').then(function(registration) {  console.log('Excellent, registered with scope: ', registration.scope);});
   }
 };

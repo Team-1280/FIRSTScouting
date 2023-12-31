@@ -27,6 +27,7 @@ var assets = [
   './pit.html',
   './favicon.ico',
   './resources/css/normalize.css',
+  './resources/css/water.css',
   './resources/css/scoutingPASS.css',
   './resources/images/field_location_key.png',
   './resources/js/easy.qrcode.min.js',
@@ -47,7 +48,8 @@ var assets = [
   './android-chrome-192x192.png',
   './android-chrome-512x512.png',
   './favicon-32x32.png',
-  './favicon-16x16.png'
+  './favicon-16x16.png',
+  '/'
 ]
 
 // cache responses of provided URLs
