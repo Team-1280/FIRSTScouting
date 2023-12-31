@@ -20,7 +20,7 @@ const config_data = JSON.parse(fs.readFileSync(config, "utf8"))
 
 const server = http.createServer((req, res) => {
     const urlPath = url.parse(req.url).pathname
-    let rawData = JSON.parse(fs.readFileSync("./data/data.json", "utf8"))
+    let rawData = JSON.parse(fs.readFileSync(config_data["data"], "utf8"))
 
     switch (urlPath) {
         case "/":
@@ -36,19 +36,13 @@ const server = http.createServer((req, res) => {
             res.writeHead(200, { "Content-Type": "text/plain" })
             res.write("params")
             res.end()
-            let data = require("../data/data.json")
-            data[Object.keys(data).length.toString()] = params
-            fs.writeFile("./data/data.json", JSON.stringify(data), (err) => {
-                if (err) throw err
-            })
+            rawData[Object.keys(rawData).length.toString()] = params
+            fs.writeFileSync(config_data["data"], JSON.stringify(rawData))
             break
         case "/rawdata":
-            fs.readFile("./data/data.json", (err, data) => {
-                if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/plain" })
-                res.write(data)
-                return res.end()
-            })
+            res.writeHead(200, { "Content-Type": "text/plain" })
+            res.write(JSON.stringify(rawData))
+            res.end()
             break
         case "/view":
             fs.readFile("./src/view.html", (err, data) => {
@@ -239,16 +233,15 @@ const server = http.createServer((req, res) => {
             for (let entry of entries) {
                 if (entry != "") {
                     let fields = entry.split(";")
-                    let data = require("../data/data.json")
-                    let index = Object.keys(data).length.toString()
-                    data[index] = {}
+                    let index = Object.keys(rawData).length.toString()
+                    rawData[index] = {}
                     for (let field of fields) {
                         let [key, value] = field.split("=")
-                        data[index][key] = value
+                        rawData[index][key] = value
                     }
                     fs.writeFileSync(
-                        "./data/data.json",
-                        JSON.stringify(data, null, 2)
+                        config_data["data"],
+                        JSON.stringify(rawData, null, 2)
                     )
                 }
             }

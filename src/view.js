@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
     const table = document.getElementById("data")
     const filterDiv = document.getElementById("filter")
 
@@ -6,173 +6,146 @@ document.addEventListener("DOMContentLoaded", function () {
     let headersToShow = []
     let keys = {}
 
-    let xhr = new XMLHttpRequest()
-    xhr.open("GET", "/keynames", false)
-
-    try {
-        xhr.send()
-        if (xhr.status != 200) {
-            alert(`Error ${xhr.status}: ${xhr.statusText}`)
-        } else {
-            keys = JSON.parse(xhr.responseText)["keys"]
-            headersToShow = JSON.parse(xhr.responseText)["headers"]
-        }
-    } catch (err) {
-        // instead of onerror
-        alert("Request failed")
-    }
+    // Fetch JSON data from /keynames
+    let keynames = await fetch("/keynames")
+    keynames = await keynames.json()
+    headersToShow = keynames["headers"]
+    keys = keynames["keys"]
 
     // Fetch JSON data from the /rawdata endpoint
-    fetch("/rawdata")
-        .then((response) => response.json())
-        .then((data) => {
-            // Convert data object into an array of rows
-            const rows = Object.values(data)
+    let data = await fetch("/rawdata")
+    data = await data.json()
 
-            if (rows.length === 0) {
-                // Handle empty data
-                const emptyRow = document.createElement("tr")
-                const emptyCell = document.createElement("td")
-                emptyCell.colSpan = Object.keys(data[0]).length
-                emptyCell.textContent = "No data available"
-                emptyRow.appendChild(emptyCell)
-                table.appendChild(emptyRow)
-                return
-            }
+    // Convert data object into an array of rows
+    const rows = Object.values(data)
 
-            headers = Object.keys(rows[0])
-            let ogheaders = Object.keys(rows[0])
-            ogheaders.push("bulk-export")
-            headers.push("bulk-export")
-            for (let i = 0; i < headers.length; i++) {
-                if (Object.keys(keys).includes(headers[i])) {
-                    headers[i] = keys[headers[i]]
-                }
+    if (rows.length === 0) {
+        // Handle empty data
+        const emptyRow = document.createElement("tr")
+        const emptyCell = document.createElement("td")
+        emptyCell.colSpan = Object.keys(data[0]).length
+        emptyCell.textContent = "No data available"
+        emptyRow.appendChild(emptyCell)
+        table.appendChild(emptyRow)
+        return
+    }
 
-                headers[i] = headers[i]
-                    .split("-")
-                    .join(" ")
-                    .replace(/\w\S*/g, function (txt) {
-                        return (
-                            txt.charAt(0).toUpperCase() +
-                            txt.substr(1).toLowerCase()
-                        )
-                    })
-            }
+    headers = Object.keys(rows[0])
+    let ogheaders = Object.keys(rows[0])
+    ogheaders.push("bulk-export")
+    headers.push("bulk-export")
+    for (let i = 0; i < headers.length; i++) {
+        if (Object.keys(keys).includes(headers[i])) {
+            headers[i] = keys[headers[i]]
+        }
 
-            // Create table header with sorting indicators for specified columns
-            const headerRow = document.createElement("tr")
-            headers.forEach((header, index) => {
-                const th = document.createElement("th")
-                th.textContent = header
-                th.dataset.sort = "none" // Initial sorting state
-                th.addEventListener("click", () => {
-                    sortTable(table, headers.indexOf(header))
-                })
-                headerRow.appendChild(th)
+        headers[i] = headers[i]
+            .split("-")
+            .join(" ")
+            .replace(/\w\S*/g, function (txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
             })
-            table.appendChild(headerRow)
+    }
 
-            // Create table rows with data for specified columns
-            rows.forEach((rowData, index) => {
-                const row = document.createElement("tr")
-                ogheaders.forEach((header) => {
-                    if (header == "bulk-export") {
-                        const cell = document.createElement("td")
-                        const checkbox = document.createElement("input")
-                        checkbox.type = "checkbox"
-                        checkbox.addEventListener("change", () => {
-                            checkbox.classList.toggle("bulkChecked")
-                        })
-                        checkbox.id = `bulkCheckbox${index}`
-                        checkbox.classList.add("bulkChecks")
-                        cell.appendChild(checkbox)
-                        const label = document.createElement("label")
-                        label.htmlFor = `bulkCheckbox${index}`
-                        cell.appendChild(label)
-                        row.appendChild(cell)
-                    } else {
-                        const cell = document.createElement("td")
-                        cell.textContent = rowData[header]
-                        row.appendChild(cell)
-                    }
-                })
-                table.appendChild(row)
-            })
+    // Create table header with sorting indicators for specified columns
+    const headerRow = document.createElement("tr")
+    headers.forEach((header, index) => {
+        const th = document.createElement("th")
+        th.textContent = header
+        th.dataset.sort = "none" // Initial sorting state
+        th.addEventListener("click", () => {
+            sortTable(table, headers.indexOf(header))
+        })
+        headerRow.appendChild(th)
+    })
+    table.appendChild(headerRow)
 
-            // Create filtering input fields dropdown
-            const filterContainer = createDropdownContainer(
-                headers,
-                "filter-container"
-            )
-            const filterInputs = [] // Define an array to store the filter inputs
-            headers.forEach((header) => {
-                const input = document.createElement("input")
-                input.type = "text"
-                input.placeholder = `${header}`
-                input.classList.add("filter-input")
-                input.addEventListener("input", () => {
-                    applyFilters(table, filterInputs)
-                })
-                filterInputs.push(input) // Store the input in the array
-                filterContainer.appendChild(input)
-            })
-
-            // Create column selection checkboxes dropdown
-            const columnContainer = createDropdownContainer(
-                headers,
-                "column-container"
-            )
-            headers.forEach((header, index) => {
-                const isHeaderToShow = headersToShow.includes(header)
+    // Create table rows with data for specified columns
+    rows.forEach((rowData, index) => {
+        const row = document.createElement("tr")
+        ogheaders.forEach((header) => {
+            if (header == "bulk-export") {
+                const cell = document.createElement("td")
                 const checkbox = document.createElement("input")
                 checkbox.type = "checkbox"
-                checkbox.checked = isHeaderToShow // Default to checked for specified columns
-                checkbox.classList.add("column-checkbox")
                 checkbox.addEventListener("change", () => {
-                    if (checkbox.checked) {
-                        headersToShow.push(header) // Add to headersToShow
-                    } else {
-                        const index = headersToShow.indexOf(header)
-                        if (index !== -1) {
-                            headersToShow.splice(index, 1) // Remove from headersToShow
-                        }
-                    }
-                    applyColumnSelection(table)
+                    checkbox.classList.toggle("bulkChecked")
                 })
+                checkbox.id = `bulkCheckbox${index}`
+                checkbox.classList.add("bulkChecks")
+                cell.appendChild(checkbox)
                 const label = document.createElement("label")
-                label.textContent = header
-                const container = document.createElement("div")
-                container.classList.add("checkcontainer")
-                container.appendChild(checkbox)
-                container.appendChild(label)
-                columnContainer.appendChild(container)
-                applyColumnSelection(table)
-            })
-
-            // Create dropdown toggle buttons
-            const filterButton = createToggleButton(
-                "Toggle Filters",
-                filterContainer
-            )
-            const columnButton = createToggleButton(
-                "Toggle Columns",
-                columnContainer
-            )
-
-            const buttonContainer = document.createElement("div")
-            buttonContainer.classList.add("button-container")
-            buttonContainer.appendChild(columnButton)
-            buttonContainer.appendChild(filterButton)
-            filterDiv.appendChild(buttonContainer)
-            filterDiv.appendChild(document.createElement("br"))
-            filterDiv.appendChild(document.createElement("br"))
-            filterDiv.appendChild(columnContainer)
-            filterDiv.appendChild(filterContainer)
-
-            originalRows = Array.from(table.rows).slice(1)
+                label.htmlFor = `bulkCheckbox${index}`
+                cell.appendChild(label)
+                row.appendChild(cell)
+            } else {
+                const cell = document.createElement("td")
+                cell.textContent = rowData[header]
+                row.appendChild(cell)
+            }
         })
-        .catch((error) => console.error("Error fetching data:", error))
+        table.appendChild(row)
+    })
+
+    // Create filtering input fields dropdown
+    const filterContainer = createDropdownContainer(headers, "filter-container")
+    const filterInputs = [] // Define an array to store the filter inputs
+    headers.forEach((header) => {
+        const input = document.createElement("input")
+        input.type = "text"
+        input.placeholder = `${header}`
+        input.classList.add("filter-input")
+        input.addEventListener("input", () => {
+            applyFilters(table, filterInputs)
+        })
+        filterInputs.push(input) // Store the input in the array
+        filterContainer.appendChild(input)
+    })
+
+    // Create column selection checkboxes dropdown
+    const columnContainer = createDropdownContainer(headers, "column-container")
+    headers.forEach((header, index) => {
+        const isHeaderToShow = headersToShow.includes(header)
+        const checkbox = document.createElement("input")
+        checkbox.type = "checkbox"
+        checkbox.checked = isHeaderToShow // Default to checked for specified columns
+        checkbox.classList.add("column-checkbox")
+        checkbox.addEventListener("change", () => {
+            if (checkbox.checked) {
+                headersToShow.push(header) // Add to headersToShow
+            } else {
+                const index = headersToShow.indexOf(header)
+                if (index !== -1) {
+                    headersToShow.splice(index, 1) // Remove from headersToShow
+                }
+            }
+            applyColumnSelection(table)
+        })
+        const label = document.createElement("label")
+        label.textContent = header
+        const container = document.createElement("div")
+        container.classList.add("checkcontainer")
+        container.appendChild(checkbox)
+        container.appendChild(label)
+        columnContainer.appendChild(container)
+        applyColumnSelection(table)
+    })
+
+    // Create dropdown toggle buttons
+    const filterButton = createToggleButton("Toggle Filters", filterContainer)
+    const columnButton = createToggleButton("Toggle Columns", columnContainer)
+
+    const buttonContainer = document.createElement("div")
+    buttonContainer.classList.add("button-container")
+    buttonContainer.appendChild(columnButton)
+    buttonContainer.appendChild(filterButton)
+    filterDiv.appendChild(buttonContainer)
+    filterDiv.appendChild(document.createElement("br"))
+    filterDiv.appendChild(document.createElement("br"))
+    filterDiv.appendChild(columnContainer)
+    filterDiv.appendChild(filterContainer)
+
+    originalRows = Array.from(table.rows).slice(1)
 
     function createToggleButton(text, container) {
         const button = document.createElement("button")
