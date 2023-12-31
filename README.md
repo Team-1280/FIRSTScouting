@@ -1,38 +1,49 @@
 # ![Logo](./images/C-Biscuit.png) Scouting
 
-A(n unofficial) scouting application for Team 1280.
+A scouting application for Team 1280.
 
 ## Setup
 
-After cloning, run:
-
-```
-yarn
-yarn build
-node . <ScoutPASS config file path> <host address>
-# eg. node . ./pass/2023/CU_config.js 192.168.0.174
-```
-
-`yarn build` creates `data/data.json` and `data/key.json` (and a gitignore file). `data.json` stores the data, and `key.json` converts the data keys into a readable key. For example:
+After cloning, create a config file. The config file should include:
 
 ```json
 {
-    "s": "Scouter Initials",
-    "e": "Event",
-    "l": "Match Level",
-    "m": "Match #",
-    "r": "Robot",
-    "t": "Team #",
-    .
-    .
-    .
+    "data": "location to store scouted data",
+    "headers": [
+        // Any headers that should be shown on default when viewing data
+    ],
+    "averages": [
+        // Any columns in the data that should also have corresponding team- and alliance-wide averages during team lookup and predictions.
+    ],
+    "weights": {
+        // Dictionary of weights in ScoutingPASS for all averaged data when calculating win probabilities
+    },
+    "stages": [
+        // List of stages in the game
+        // eg. "premature", "auton", "teleop", "endgame"
+    ],
+    "PASS": {
+        // ScoutingPASS config
+    },
+    "PASSConfigPath": "Path to where ScoutingPASS config should be written/overwritten",
+    "keys": {
+        // Dictionary of keys in ScoutingPASS data and their corresponding display names
+    }
 }
 ```
 
-`key.json` is automatically generated when you run the program, and you never need to edit it.
+After, run `yarn build PATH_TO_CONFIG_FILE`, and `yarn start PATH_TO_CONFIG_FILE HOST`. For example:
+
+```sh
+> yarn build ./config.json
+> yarn start ./config.json localhost # if no host is specified, defaults to localhost
+Server running at http://localhost:3000/
+Scouting P.A.S.S. Server running at http://localhost:8000/
+```
 
 ## Screenshots/Videos
 
-![Screenshot of the data viewing page](./images/dataPage.png)
-![Screenshot of ScoutingPASS integration](./images/generatePage.png)
-![Demo GIF of the application](./images/demo.gif)
+![ScoutingPASS](./images/ScoutingPASS.png)
+![Home Page](./images/home.png)
+![Data](./images/dataView.png)
+![Win Prediction](./images/winPredict.png)

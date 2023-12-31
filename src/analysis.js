@@ -132,8 +132,7 @@ document
                         : 0
                 }
                 let bwp =
-                    Math.round((1 / (1 + Math.pow(Math.E, -wp))) * 10000) /
-                    10000
+                    Math.round((1 / (1 + Math.pow(Math.E, -wp))) * 100) / 100
                 let rwp = 1 - bwp
 
                 rPreHTML += `</div>

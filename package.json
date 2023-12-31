@@ -32,7 +32,8 @@
         "postinstall": "husky install",
         "prepack": "pinst --disable",
         "postpack": "pinst --enable",
-        "build": "node scripts/build.js"
+        "build": "node scripts/build.js",
+        "start": "node ."
     },
     "dependencies": {
         "brotli-wasm": "^2.0.1",
