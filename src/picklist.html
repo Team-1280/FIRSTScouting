@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>FIRST Scouting</title>
+        <style>
+            @import "./water.css";
+
+            #weights {
+                display: flex;
+                justify-content: center;
+            }
+
+            #teams {
+                width: 90%;
+                margin: auto;
+            }
+
+            #teamsTable,
+            #teamsTable th,
+            #teamsTable td,
+            #picklist,
+            #picklist th,
+            #picklist td {
+                border: 1px solid #ccc;
+            }
+
+            #picklist {
+                width: 90%;
+                margin: auto;
+                border-collapse: collapse;
+                -webkit-user-select: none; /* Safari */
+                -ms-user-select: none; /* IE 10+ and Edge */
+                user-select: none; /* Standard syntax */
+            }
+
+            #picklist td,
+            #picklist th,
+            #picklist tr {
+                border-collapse: collapse;
+                cursor: all-scroll;
+            }
+        </style>
+    </head>
+
+    <body>
+        <header>
+            <h1>FIRST Scouting</h1>
+        </header>
+
+        <nav>
+            <a href="/">Scan</a>
+            <a href="/view">View</a>
+            <a href="/analysis">Analysis</a>
+            <a href="/picklist">Picklist</a>
+        </nav>
+
+        <div class="container">
+            <div id="weights"></div>
+            <div id="teams"></div>
+        </div>
+
+        <div class="container">
+            <h2>Picklist</h2>
+            <table id="picklist">
+                <thead id="pthead"></thead>
+                <tbody id="pbody"></tbody>
+            </table>
+            <button id="save" onclick="saveList()">Save</button>
+            <button id="load" onclick="loadList()">Load</button>
+        </div>
+
+        <script src="./sortable.min.js"></script>
+        <script src="./picklist.js"></script>
+    </body>
+</html>

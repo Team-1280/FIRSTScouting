@@ -275,6 +275,92 @@ const server = http.createServer((req, res) => {
             )
             res.end()
             break
+        case "/picklistData":
+            let picklistData = {
+                weights: Object.keys(config_data["picklist"]),
+                teams: {},
+                weightRanges: config_data["picklist"]
+            }
+
+            for (let game in rawData) {
+                let gameData = {}
+                let avg = picklistData["teams"][rawData[game]["t"]]
+                    ? picklistData["teams"][rawData[game]["t"]]["avg"]
+                    : {}
+                for (let weight of Object.keys(config_data["picklist"])) {
+                    gameData[weight] = rawData[game][weight]
+
+                    avg[weight] =
+                        avg[weight] && parseFloat(rawData[game][weight])
+                            ? avg[weight] + parseFloat(rawData[game][weight])
+                            : parseFloat(rawData[game][weight])
+                }
+
+                if (!picklistData["teams"][rawData[game]["t"]]) {
+                    picklistData["teams"][rawData[game]["t"]] = {
+                        games: [],
+                        avg: avg
+                    }
+                }
+                picklistData["teams"][rawData[game]["t"]]["games"].push(
+                    gameData
+                )
+                picklistData["teams"][rawData[game]["t"]]["avg"] = avg
+            }
+
+            for (let team in picklistData["teams"]) {
+                for (let weight of picklistData["weights"]) {
+                    picklistData["teams"][team]["avg"][weight] =
+                        picklistData["teams"][team]["avg"][weight] /
+                        picklistData["teams"][team]["games"].length
+                }
+            }
+
+            res.writeHead(200, { "Content-Type": "application/json" })
+            res.end(JSON.stringify(picklistData))
+            break
+        case "/picklist":
+            fs.readFile("./src/picklist.html", (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "text/html" })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case "/loadPicklist":
+            fs.readFile(config_data["picklistFile"], (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "application/json" })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case "/savePicklist":
+            // Get body of request
+            let body = ""
+            req.on("data", (chunk) => {
+                body += chunk
+            })
+
+            req.on("end", () => {
+                let picklistData = JSON.parse(body)
+                fs.writeFileSync(
+                    config_data["picklistFile"],
+                    JSON.stringify(picklistData, null, 2)
+                )
+                res.writeHead(200, { "Content-Type": "application/json" })
+                res.write(JSON.stringify({ success: true }))
+                res.end()
+            })
+            break
+        case "/sortable.min.js":
+            fs.readFile("./src/sortable.min.js", (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "text/javascript" })
+                res.write(data)
+                return res.end()
+            })
+            break
         case "/view.js":
             fs.readFile("./src/view.js", (err, data) => {
                 if (err) throw err
@@ -309,6 +395,14 @@ const server = http.createServer((req, res) => {
             break
         case "/analysis.js":
             fs.readFile("./src/analysis.js", (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { "Content-Type": "text/javascript" })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case "/picklist.js":
+            fs.readFile("./src/picklist.js", (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { "Content-Type": "text/javascript" })
                 res.write(data)

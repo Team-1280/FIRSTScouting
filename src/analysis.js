@@ -131,17 +131,16 @@ document
                               Number(data["r"]["overall"][average]))
                         : 0
                 }
-                let bwp =
-                    Math.round((1 / (1 + Math.pow(Math.E, -wp))) * 100) / 100
+                let bwp = 1 / (1 + Math.pow(Math.E, -wp))
                 let rwp = 1 - bwp
 
                 rPreHTML += `</div>
                 <div class='progress-container'>
                     <h4>Win Probability</h4>
                     <div class='progress-bar'>
-                        <div data-size='${rwp * 100}' class='progress'>${
+                        <div data-size='${rwp * 100}' class='progress'>${(
                     rwp * 100
-                }%</div>
+                ).toFixed(2)}%</div>
                     </div>
                     </div>
                 </div>`
@@ -149,9 +148,9 @@ document
                 <div class='progress-container'>
                     <h4>Win Probability</h4>
                     <div class='progress-bar'>
-                        <div data-size='${bwp * 100}' class='progress'>${
+                        <div data-size='${bwp * 100}' class='progress'>${(
                     bwp * 100
-                }%</div>
+                ).toFixed(2)}%</div>
                     </div>
                     </div>
                 </div>`
