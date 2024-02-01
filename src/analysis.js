@@ -1,18 +1,18 @@
 // Get teams when form is submitted
 document
-    .getElementById("alliances")
-    .addEventListener("submit", async function (e) {
+    .getElementById('alliances')
+    .addEventListener('submit', async function (e) {
         e.preventDefault()
         let teams = {
             r: [],
             b: []
         }
         for (let i = 1; i <= 3; i++) {
-            let ri = document.getElementById("red" + i).value
-            let bi = document.getElementById("blue" + i).value
+            let ri = document.getElementById('red' + i).value
+            let bi = document.getElementById('blue' + i).value
 
-            if (ri == "" || bi == "") {
-                alert("Please fill in all fields")
+            if (ri == '' || bi == '') {
+                alert('Please fill in all fields')
                 return
             }
 
@@ -20,32 +20,32 @@ document
             teams.r.push(ri)
         }
         // Fetch team data from server
-        console.log("/teams?teams=" + JSON.stringify(teams))
+        console.log('/teams?teams=' + JSON.stringify(teams))
 
-        let data = fetch("/teams?teams=" + JSON.stringify(teams))
+        let data = fetch('/teams?teams=' + JSON.stringify(teams))
             .then((response) => response.json())
             .then((data) => {
                 console.log(data)
-                document.getElementById("redPredictions").innerHTML = ""
-                document.getElementById("bluePredictions").innerHTML = ""
+                document.getElementById('redPredictions').innerHTML = ''
+                document.getElementById('bluePredictions').innerHTML = ''
 
                 let rPreHTML = "<div id='rNoGames'>"
                 let bPreHTML = "<div id='bNoGames'>"
 
-                if (data["noGames"].length > 0) {
+                if (data['noGames'].length > 0) {
                     // Find teams corresponding alliances
-                    let noGames = data["noGames"]
+                    let noGames = data['noGames']
                     for (let team of noGames) {
                         if (teams.r.includes(team)) {
                             rPreHTML +=
-                                "<strong>Team " +
+                                '<strong>Team ' +
                                 team +
-                                " has no games</strong><br>"
+                                ' has no games</strong><br>'
                         } else if (teams.b.includes(team)) {
                             bPreHTML +=
-                                "<strong>Team " +
+                                '<strong>Team ' +
                                 team +
-                                " has no games</strong><br>"
+                                ' has no games</strong><br>'
                         }
                     }
                 }
@@ -56,41 +56,41 @@ document
                     "</div><div style='display:flex;justify-content:center;'>"
 
                 for (let i = 1; i <= 3; i++) {
-                    let r = data["r"][i]
-                    let b = data["b"][i]
+                    let r = data['r'][i]
+                    let b = data['b'][i]
 
                     rPreHTML +=
                         "<div class='team' id='red" +
-                        r["team"] +
+                        r['team'] +
                         "'><h3>Team " +
-                        r["team"] +
-                        "</h3><ul>"
+                        r['team'] +
+                        '</h3><ul>'
                     bPreHTML +=
                         "<div class='team' id='blue" +
-                        b["team"] +
+                        b['team'] +
                         "'><h3>Team " +
-                        b["team"] +
-                        "</h3><ul>"
+                        b['team'] +
+                        '</h3><ul>'
 
-                    for (let average in r["averages"]) {
+                    for (let average in r['averages']) {
                         rPreHTML +=
-                            "<li> Avg. " +
+                            '<li> Avg. ' +
                             average +
-                            ": " +
-                            r["averages"][average] +
-                            "</li>"
+                            ': ' +
+                            r['averages'][average] +
+                            '</li>'
                     }
-                    for (let average in b["averages"]) {
+                    for (let average in b['averages']) {
                         bPreHTML +=
-                            "<li> Avg. " +
+                            '<li> Avg. ' +
                             average +
-                            ": " +
-                            b["averages"][average] +
-                            "</li>"
+                            ': ' +
+                            b['averages'][average] +
+                            '</li>'
                     }
 
-                    rPreHTML += "</ul></div>"
-                    bPreHTML += "</ul></div>"
+                    rPreHTML += '</ul></div>'
+                    bPreHTML += '</ul></div>'
                 }
 
                 rPreHTML +=
@@ -100,35 +100,35 @@ document
 
                 wp = 0
                 nf = 0
-                wpWeights = data["weights"]
+                wpWeights = data['weights']
 
-                for (let average in data["b"]["overall"]) {
-                    if (average.endsWith("list")) continue
+                for (let average in data['b']['overall']) {
+                    if (average.endsWith('list')) continue
 
                     bPreHTML +=
-                        "<li> Avg. " +
+                        '<li> Avg. ' +
                         average +
-                        ": " +
+                        ': ' +
                         Math.round(
-                            Number(data["b"]["overall"][average]) * 100
+                            Number(data['b']['overall'][average]) * 100
                         ) /
                             100 +
-                        "</li>"
+                        '</li>'
 
                     rPreHTML +=
-                        "<li> Avg. " +
+                        '<li> Avg. ' +
                         average +
-                        ": " +
+                        ': ' +
                         Math.round(
-                            Number(data["r"]["overall"][average]) * 100
+                            Number(data['r']['overall'][average]) * 100
                         ) /
                             100 +
-                        "</li>"
+                        '</li>'
 
                     wp += wpWeights[average]
                         ? wpWeights[average] *
-                          (Number(data["b"]["overall"][average]) -
-                              Number(data["r"]["overall"][average]))
+                          (Number(data['b']['overall'][average]) -
+                              Number(data['r']['overall'][average]))
                         : 0
                 }
                 let bwp = 1 / (1 + Math.pow(Math.E, -wp))
@@ -155,10 +155,10 @@ document
                     </div>
                 </div>`
 
-                document.getElementById("redPredictions").innerHTML = rPreHTML
-                document.getElementById("bluePredictions").innerHTML = bPreHTML
+                document.getElementById('redPredictions').innerHTML = rPreHTML
+                document.getElementById('bluePredictions').innerHTML = bPreHTML
 
-                const progress_bars = document.querySelectorAll(".progress")
+                const progress_bars = document.querySelectorAll('.progress')
 
                 progress_bars.forEach((bar) => {
                     const { size } = bar.dataset

@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>FIRST Scouting</title>
         <style>
-            @import "./water.css";
+            @import './water.css';
         </style>
     </head>
     <body>
@@ -44,26 +44,26 @@
         <script src="./html5-qrcode.min.js"></script>
         <script>
             // Create link element
-            const scoutpass = document.createElement("a")
+            const scoutpass = document.createElement('a')
             scoutpass.href = `http://${
-                window.location.host.split(":")[0] || "localhost"
+                window.location.host.split(':')[0] || 'localhost'
             }:8000`
-            scoutpass.target = "_blank"
-            scoutpass.innerHTML = "Generate"
+            scoutpass.target = '_blank'
+            scoutpass.innerHTML = 'Generate'
 
             // Add link to document
-            document.getElementById("nav").appendChild(scoutpass)
+            document.getElementById('nav').appendChild(scoutpass)
 
             async function onScanSuccess(decodedText, decodedResult) {
                 const data = decodedText
 
                 // Split the data into individual key-value pairs
-                const pairs = data.split(";")
+                const pairs = data.split(';')
 
                 // Create an object to store the parsed key-value pairs
                 const parsedData = {}
                 pairs.forEach((pair) => {
-                    const [key, value] = pair.split("=")
+                    const [key, value] = pair.split('=')
                     parsedData[key] = value
                 })
 
@@ -72,7 +72,7 @@
 
                 // Construct the final URL parameters string
                 const baseUrl = `http://${
-                    window.location.host.split(":")[0] || "localhost"
+                    window.location.host.split(':')[0] || 'localhost'
                 }:3000/data` // Replace with your server's URL
                 const finalUrl = `${baseUrl}?${encodedData}`
 
@@ -80,36 +80,36 @@
                 fetch(finalUrl)
 
                 // Send user to /view
-                window.location.href = "/view"
+                window.location.href = '/view'
             }
 
             function onScanFailure(error) {
                 return
             }
 
-            document.getElementById("start").addEventListener("click", () => {
+            document.getElementById('start').addEventListener('click', () => {
                 let html5QrcodeScanner = new Html5QrcodeScanner(
-                    "reader",
+                    'reader',
                     { fps: 10, qrbox: { width: 250, height: 250 } },
                     false
                 )
                 html5QrcodeScanner.render(onScanSuccess, onScanFailure)
 
-                document.getElementById("start").style.display = "none"
+                document.getElementById('start').style.display = 'none'
             })
 
             document
-                .getElementById("submitText")
-                .addEventListener("click", async () => {
-                    const data = document.getElementById("data").value
+                .getElementById('submitText')
+                .addEventListener('click', async () => {
+                    const data = document.getElementById('data').value
 
                     // Split the data into individual key-value pairs
-                    const pairs = data.split(";")
+                    const pairs = data.split(';')
 
                     // Create an object to store the parsed key-value pairs
                     const parsedData = {}
                     pairs.forEach((pair) => {
-                        const [key, value] = pair.split("=")
+                        const [key, value] = pair.split('=')
 
                         parsedData[key] = value
                     })
@@ -121,7 +121,7 @@
 
                     // Construct the final URL parameters string
                     const baseUrl = `http://${
-                        window.location.host.split(":")[0] || "localhost"
+                        window.location.host.split(':')[0] || 'localhost'
                     }:3000/data` // Replace with your server's URL
                     const finalUrl = `${baseUrl}?${encodedData}`
 
@@ -129,7 +129,7 @@
                     fetch(finalUrl)
 
                     // Send user to /view
-                    window.location.href = "/view"
+                    window.location.href = '/view'
                 })
 
             async function onBulkScanSuccess(decodedText, decodedResult) {
@@ -137,12 +137,12 @@
 
                 // Send the data to the server
                 const baseUrl = `http://${
-                    window.location.host.split(":")[0] || "localhost"
+                    window.location.host.split(':')[0] || 'localhost'
                 }:3000/receiveBulk?data=${data}` // Replace with your server's URL
                 fetch(baseUrl)
 
                 // Send user to /view
-                window.location.href = "/view"
+                window.location.href = '/view'
             }
 
             function onBulkScanFailure(error) {
@@ -150,10 +150,10 @@
             }
 
             document
-                .getElementById("bulkStart")
-                .addEventListener("click", () => {
+                .getElementById('bulkStart')
+                .addEventListener('click', () => {
                     let html5QrcodeBulkScanner = new Html5QrcodeScanner(
-                        "bulkReader",
+                        'bulkReader',
                         { fps: 10, qrbox: { width: 250, height: 250 } },
                         false
                     )
@@ -162,11 +162,11 @@
                         onBulkScanFailure
                     )
 
-                    document.getElementById("bulkStart").style.display = "none"
+                    document.getElementById('bulkStart').style.display = 'none'
                 })
 
-            document.getElementById("bulkGen").addEventListener("click", () => {
-                window.location.href = "/bulk"
+            document.getElementById('bulkGen').addEventListener('click', () => {
+                window.location.href = '/bulk'
             })
         </script>
     </body>

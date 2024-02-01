@@ -8,19 +8,11 @@
         "Match #",
         "Robot"
     ],
-    "averages": [
-        "Score"
-    ],
+    "averages": ["Score"],
     "weights": {
         "Score": 1
     },
-    "stages": [
-        "prematch",
-        "auton",
-        "teleop",
-        "endgame",
-        "postmatch"
-    ],
+    "stages": ["prematch", "auton", "teleop", "endgame", "postmatch"],
     "PASS": {
         "title": "Scouting PASS 2024",
         "page_title": "Crescendo",

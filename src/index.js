@@ -1,13 +1,13 @@
-const http = require("http")
-const fs = require("fs")
-const QRCode = require("qrcode")
-const url = require("url")
-const brotli = require("brotli-wasm")
+const http = require('http')
+const fs = require('fs')
+const QRCode = require('qrcode')
+const url = require('url')
+const brotli = require('brotli-wasm')
 
-let host = "localhost"
+let host = 'localhost'
 
 if (process.argv.length < 3) {
-    throw new Error("Usage: node index.js <config> <host> <port>")
+    throw new Error('Usage: node index.js <config> <host> <port>')
 }
 
 if (process.argv.length > 3) {
@@ -16,47 +16,47 @@ if (process.argv.length > 3) {
 
 let config = process.argv[2]
 
-const config_data = JSON.parse(fs.readFileSync(config, "utf8"))
+const config_data = JSON.parse(fs.readFileSync(config, 'utf8'))
 
 const server = http.createServer((req, res) => {
     const urlPath = url.parse(req.url).pathname
-    let rawData = JSON.parse(fs.readFileSync(config_data["data"], "utf8"))
+    let rawData = JSON.parse(fs.readFileSync(config_data['data'], 'utf8'))
 
     switch (urlPath) {
-        case "/":
-            fs.readFile("./src/index.html", (err, data) => {
+        case '/':
+            fs.readFile('./src/index.html', (err, data) => {
                 if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/html" })
+                res.writeHead(200, { 'Content-Type': 'text/html' })
                 res.write(data)
                 return res.end()
             })
             break
-        case "/data":
+        case '/data':
             const params = url.parse(req.url, true).query
-            res.writeHead(200, { "Content-Type": "text/plain" })
-            res.write("params")
+            res.writeHead(200, { 'Content-Type': 'text/plain' })
+            res.write('params')
             res.end()
             rawData[Object.keys(rawData).length.toString()] = params
-            fs.writeFileSync(config_data["data"], JSON.stringify(rawData))
+            fs.writeFileSync(config_data['data'], JSON.stringify(rawData))
             break
-        case "/rawdata":
-            res.writeHead(200, { "Content-Type": "text/plain" })
+        case '/rawdata':
+            res.writeHead(200, { 'Content-Type': 'text/plain' })
             res.write(JSON.stringify(rawData))
             res.end()
             break
-        case "/view":
-            fs.readFile("./src/view.html", (err, data) => {
+        case '/view':
+            fs.readFile('./src/view.html', (err, data) => {
                 if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/html" })
+                res.writeHead(200, { 'Content-Type': 'text/html' })
                 res.write(data)
                 return res.end()
             })
             break
-        case "/teams":
+        case '/teams':
             // Get all games with each team
             let teams = JSON.parse(url.parse(req.url, true).query.teams)
 
-            let averages = config_data["averages"]
+            let averages = config_data['averages']
 
             let teamData = {
                 r: {
@@ -97,25 +97,25 @@ const server = http.createServer((req, res) => {
                 },
                 noGames: [],
                 weights: {
-                    ...config_data["weights"]
+                    ...config_data['weights']
                 }
             }
 
             for (let game in Object.keys(rawData)) {
                 for (var team = 0; team < 3; team++) {
-                    if (rawData[game]["t"] == teams.r[team]) {
-                        teamData["r"][team + 1]["games"].push(rawData[game])
+                    if (rawData[game]['t'] == teams.r[team]) {
+                        teamData['r'][team + 1]['games'].push(rawData[game])
                     }
-                    if (rawData[game]["t"] == teams.b[team]) {
-                        teamData["b"][team + 1]["games"].push(rawData[game])
+                    if (rawData[game]['t'] == teams.b[team]) {
+                        teamData['b'][team + 1]['games'].push(rawData[game])
                     }
                 }
             }
 
             for (let alliance in teamData) {
-                if (alliance == "noGames" || alliance == "weights") continue
+                if (alliance == 'noGames' || alliance == 'weights') continue
                 for (let team in teamData[alliance]) {
-                    if (team == "overall") continue
+                    if (team == 'overall') continue
 
                     let data = {}
 
@@ -125,39 +125,39 @@ const server = http.createServer((req, res) => {
                         })
                     }
 
-                    if (teamData[alliance][team]["games"].length == 0) {
-                        teamData["noGames"].push(
-                            teamData[alliance][team]["team"]
+                    if (teamData[alliance][team]['games'].length == 0) {
+                        teamData['noGames'].push(
+                            teamData[alliance][team]['team']
                         )
                         continue
                     }
 
-                    for (let game in teamData[alliance][team]["games"]) {
+                    for (let game in teamData[alliance][team]['games']) {
                         for (let average of averages) {
                             let value =
-                                teamData[alliance][team]["games"][game][
+                                teamData[alliance][team]['games'][game][
                                     average[0]
                                 ]
                             if (
                                 [
-                                    "x",
-                                    "below-avg",
-                                    "avg",
-                                    "good",
-                                    "excellent"
+                                    'x',
+                                    'below-avg',
+                                    'avg',
+                                    'good',
+                                    'excellent'
                                 ].includes(value)
                             ) {
                                 data[average[0]].push(
                                     [
-                                        "x",
-                                        "below-avg",
-                                        "avg",
-                                        "good",
-                                        "excellent"
+                                        'x',
+                                        'below-avg',
+                                        'avg',
+                                        'good',
+                                        'excellent'
                                     ].indexOf(value)
                                 )
-                            } else if (value == "N" || value == "Y") {
-                                data[average[0]].push(value == "N" ? 0 : 1)
+                            } else if (value == 'N' || value == 'Y') {
+                                data[average[0]].push(value == 'N' ? 0 : 1)
                             } else if (!isNaN(value)) {
                                 data[average[0]].push(Number(value))
                             } else {
@@ -170,22 +170,22 @@ const server = http.createServer((req, res) => {
                     }
                     // Calculate averages
                     for (let average of averages) {
-                        Object.assign(teamData[alliance][team]["averages"], {
+                        Object.assign(teamData[alliance][team]['averages'], {
                             [average[1]]:
                                 data[average[0]].reduce((a, b) => a + b) /
                                 data[average[0]].length
                         })
 
-                        let current = teamData[alliance]["overall"][
-                            average[1] + "list"
+                        let current = teamData[alliance]['overall'][
+                            average[1] + 'list'
                         ]
-                            ? teamData[alliance]["overall"][average[1] + "list"]
+                            ? teamData[alliance]['overall'][average[1] + 'list']
                             : []
 
                         current.push(...data[average[0]])
 
-                        Object.assign(teamData[alliance]["overall"], {
-                            [average[1] + "list"]: current,
+                        Object.assign(teamData[alliance]['overall'], {
+                            [average[1] + 'list']: current,
                             [average[1]]:
                                 current.reduce((a, b) => a + b) / current.length
                         })
@@ -193,68 +193,68 @@ const server = http.createServer((req, res) => {
                 }
             }
 
-            res.writeHead(200, { "Content-Type": "application/json" })
+            res.writeHead(200, { 'Content-Type': 'application/json' })
             res.end(JSON.stringify(teamData))
             break
-        case "/analysis":
-            fs.readFile("./src/analysis.html", (err, data) => {
+        case '/analysis':
+            fs.readFile('./src/analysis.html', (err, data) => {
                 if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/html" })
+                res.writeHead(200, { 'Content-Type': 'text/html' })
                 res.write(data)
                 return res.end()
             })
             break
-        case "/bulk":
+        case '/bulk':
             // Generate a bulk QR code
-            let bulkData = ""
+            let bulkData = ''
 
             for (let scout in rawData) {
                 for (let key in rawData[scout]) {
                     bulkData += `${key}=${rawData[scout][key]};`
                 }
-                bulkData += "//"
+                bulkData += '//'
             }
             // Remove the last //
             bulkData = bulkData.slice(0, -2)
             let brotliData = brotli.compress(Buffer.from(bulkData), {
                 quality: 11
             })
-            QRCode.toFileStream(res, Buffer.from(brotliData).toString("hex"))
+            QRCode.toFileStream(res, Buffer.from(brotliData).toString('hex'))
             break
-        case "/receiveBulk":
+        case '/receiveBulk':
             let receivedData = url.parse(req.url, true).query.data
             let compressedData = new Uint8Array(
                 receivedData.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
             )
             let decompressedData = Buffer.from(
                 brotli.decompress(compressedData)
-            ).toString("utf8")
-            let entries = decompressedData.split("//")
+            ).toString('utf8')
+            let entries = decompressedData.split('//')
             for (let entry of entries) {
-                if (entry != "") {
-                    let fields = entry.split(";")
+                if (entry != '') {
+                    let fields = entry.split(';')
                     let index = Object.keys(rawData).length.toString()
                     rawData[index] = {}
                     for (let field of fields) {
-                        let [key, value] = field.split("=")
+                        let [key, value] = field.split('=')
                         rawData[index][key] = value
                     }
                     fs.writeFileSync(
-                        config_data["data"],
+                        config_data['data'],
                         JSON.stringify(rawData, null, 2)
                     )
                 }
             }
             break
-        case "/semiBulk":
-            let rows = url.parse(req.url, true).query.rows.split(",")
-            let semiBulkData = ""
+        case '/semiBulk':
+            let rows = url.parse(req.url, true).query.rows.split(',')
+            let semiBulkData = ''
 
             for (let row of rows) {
                 for (let key in rawData[row]) {
                     semiBulkData += `${key}=${rawData[row][key]};`
                 }
-                semiBulkData += "//"
+                semiBulkData += '//'
             }
             semiBulkData = semiBulkData.slice(0, -2)
             brotliSemiData = brotli.compress(Buffer.from(semiBulkData), {
@@ -262,32 +262,32 @@ const server = http.createServer((req, res) => {
             })
             QRCode.toFileStream(
                 res,
-                Buffer.from(brotliSemiData).toString("hex")
+                Buffer.from(brotliSemiData).toString('hex')
             )
             break
-        case "/keynames":
-            res.writeHead(200, { "Content-Type": "text/plain" })
+        case '/keynames':
+            res.writeHead(200, { 'Content-Type': 'text/plain' })
             res.write(
                 JSON.stringify({
-                    keys: config_data["keys"],
-                    headers: config_data["headers"]
+                    keys: config_data['keys'],
+                    headers: config_data['headers']
                 })
             )
             res.end()
             break
-        case "/picklistData":
+        case '/picklistData':
             let picklistData = {
-                weights: Object.keys(config_data["picklist"]),
+                weights: Object.keys(config_data['picklist']),
                 teams: {},
-                weightRanges: config_data["picklist"]
+                weightRanges: config_data['picklist']
             }
 
             for (let game in rawData) {
                 let gameData = {}
-                let avg = picklistData["teams"][rawData[game]["t"]]
-                    ? picklistData["teams"][rawData[game]["t"]]["avg"]
+                let avg = picklistData['teams'][rawData[game]['t']]
+                    ? picklistData['teams'][rawData[game]['t']]['avg']
                     : {}
-                for (let weight of Object.keys(config_data["picklist"])) {
+                for (let weight of Object.keys(config_data['picklist'])) {
                     gameData[weight] = rawData[game][weight]
 
                     avg[weight] =
@@ -296,115 +296,115 @@ const server = http.createServer((req, res) => {
                             : parseFloat(rawData[game][weight])
                 }
 
-                if (!picklistData["teams"][rawData[game]["t"]]) {
-                    picklistData["teams"][rawData[game]["t"]] = {
+                if (!picklistData['teams'][rawData[game]['t']]) {
+                    picklistData['teams'][rawData[game]['t']] = {
                         games: [],
                         avg: avg
                     }
                 }
-                picklistData["teams"][rawData[game]["t"]]["games"].push(
+                picklistData['teams'][rawData[game]['t']]['games'].push(
                     gameData
                 )
-                picklistData["teams"][rawData[game]["t"]]["avg"] = avg
+                picklistData['teams'][rawData[game]['t']]['avg'] = avg
             }
 
-            for (let team in picklistData["teams"]) {
-                for (let weight of picklistData["weights"]) {
-                    picklistData["teams"][team]["avg"][weight] =
-                        picklistData["teams"][team]["avg"][weight] /
-                        picklistData["teams"][team]["games"].length
+            for (let team in picklistData['teams']) {
+                for (let weight of picklistData['weights']) {
+                    picklistData['teams'][team]['avg'][weight] =
+                        picklistData['teams'][team]['avg'][weight] /
+                        picklistData['teams'][team]['games'].length
                 }
             }
 
-            res.writeHead(200, { "Content-Type": "application/json" })
+            res.writeHead(200, { 'Content-Type': 'application/json' })
             res.end(JSON.stringify(picklistData))
             break
-        case "/picklist":
-            fs.readFile("./src/picklist.html", (err, data) => {
+        case '/picklist':
+            fs.readFile('./src/picklist.html', (err, data) => {
                 if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/html" })
+                res.writeHead(200, { 'Content-Type': 'text/html' })
                 res.write(data)
                 return res.end()
             })
             break
-        case "/loadPicklist":
-            fs.readFile(config_data["picklistFile"], (err, data) => {
+        case '/loadPicklist':
+            fs.readFile(config_data['picklistFile'], (err, data) => {
                 if (err) throw err
-                res.writeHead(200, { "Content-Type": "application/json" })
+                res.writeHead(200, { 'Content-Type': 'application/json' })
                 res.write(data)
                 return res.end()
             })
             break
-        case "/savePicklist":
+        case '/savePicklist':
             // Get body of request
-            let body = ""
-            req.on("data", (chunk) => {
+            let body = ''
+            req.on('data', (chunk) => {
                 body += chunk
             })
 
-            req.on("end", () => {
+            req.on('end', () => {
                 let picklistData = JSON.parse(body)
                 fs.writeFileSync(
-                    config_data["picklistFile"],
+                    config_data['picklistFile'],
                     JSON.stringify(picklistData, null, 2)
                 )
-                res.writeHead(200, { "Content-Type": "application/json" })
+                res.writeHead(200, { 'Content-Type': 'application/json' })
                 res.write(JSON.stringify({ success: true }))
                 res.end()
             })
             break
-        case "/sortable.min.js":
-            fs.readFile("./src/sortable.min.js", (err, data) => {
+        case '/sortable.min.js':
+            fs.readFile('./src/sortable.min.js', (err, data) => {
                 if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/javascript" })
+                res.writeHead(200, { 'Content-Type': 'text/javascript' })
                 res.write(data)
                 return res.end()
             })
             break
-        case "/view.js":
-            fs.readFile("./src/view.js", (err, data) => {
+        case '/view.js':
+            fs.readFile('./src/view.js', (err, data) => {
                 if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/javascript" })
+                res.writeHead(200, { 'Content-Type': 'text/javascript' })
                 res.write(data)
                 return res.end()
             })
             break
-        case "/C-Biscuit.png":
-            fs.readFile("./src/C-Biscuit.png", (err, data) => {
+        case '/C-Biscuit.png':
+            fs.readFile('./src/C-Biscuit.png', (err, data) => {
                 if (err) throw err
-                res.writeHead(200, { "Content-Type": "image/png" })
+                res.writeHead(200, { 'Content-Type': 'image/png' })
                 res.write(data)
                 return res.end()
             })
             break
-        case "/water.css":
-            fs.readFile("./src/water.css", (err, data) => {
+        case '/water.css':
+            fs.readFile('./src/water.css', (err, data) => {
                 if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/css" })
+                res.writeHead(200, { 'Content-Type': 'text/css' })
                 res.write(data)
                 return res.end()
             })
             break
-        case "/html5-qrcode.min.js":
-            fs.readFile("./src/html5-qrcode.min.js", (err, data) => {
+        case '/html5-qrcode.min.js':
+            fs.readFile('./src/html5-qrcode.min.js', (err, data) => {
                 if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/js" })
+                res.writeHead(200, { 'Content-Type': 'text/js' })
                 res.write(data)
                 return res.end()
             })
             break
-        case "/analysis.js":
-            fs.readFile("./src/analysis.js", (err, data) => {
+        case '/analysis.js':
+            fs.readFile('./src/analysis.js', (err, data) => {
                 if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/javascript" })
+                res.writeHead(200, { 'Content-Type': 'text/javascript' })
                 res.write(data)
                 return res.end()
             })
             break
-        case "/picklist.js":
-            fs.readFile("./src/picklist.js", (err, data) => {
+        case '/picklist.js':
+            fs.readFile('./src/picklist.js', (err, data) => {
                 if (err) throw err
-                res.writeHead(200, { "Content-Type": "text/javascript" })
+                res.writeHead(200, { 'Content-Type': 'text/javascript' })
                 res.write(data)
                 return res.end()
             })
@@ -420,10 +420,10 @@ server.listen(3000, host, () => {
     console.log(`Server running at http://${host}:3000/`)
 })
 
-const finalhandler = require("finalhandler")
-const serveStatic = require("serve-static")
+const finalhandler = require('finalhandler')
+const serveStatic = require('serve-static')
 
-const serve = serveStatic("./pass/")
+const serve = serveStatic('./pass/')
 
 const scoutingPASSServer = http.createServer(function (req, res) {
     const done = finalhandler(req, res)

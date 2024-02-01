@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>FIRST Scouting</title>
         <style>
-            @import "./water.css";
+            @import './water.css';
 
             .progress-bar {
                 height: 2rem;
@@ -41,7 +41,7 @@
                 border-bottom: 1px solid #ccc;
             }
 
-            #alliances input[type="submit"] {
+            #alliances input[type='submit'] {
                 height: 5%;
                 align-self: center;
             }
@@ -147,22 +147,22 @@
             </div>
         </div>
         <script>
-            document.getElementById("blue").style.display = "block"
+            document.getElementById('blue').style.display = 'block'
             function tab(evt, alliance) {
                 var i, tabcontent, tablinks
-                tabcontent = document.getElementsByClassName("tabcontent")
+                tabcontent = document.getElementsByClassName('tabcontent')
                 for (i = 0; i < tabcontent.length; i++) {
-                    tabcontent[i].style.display = "none"
+                    tabcontent[i].style.display = 'none'
                 }
-                tablinks = document.getElementsByClassName("tablinks")
+                tablinks = document.getElementsByClassName('tablinks')
                 for (i = 0; i < tablinks.length; i++) {
                     tablinks[i].className = tablinks[i].className.replace(
-                        " active",
-                        ""
+                        ' active',
+                        ''
                     )
                 }
-                document.getElementById(alliance).style.display = "block"
-                evt.currentTarget.className += " active"
+                document.getElementById(alliance).style.display = 'block'
+                evt.currentTarget.className += ' active'
             }
         </script>
         <script src="./analysis.js"></script>
