@@ -15,7 +15,7 @@ var config_data = `{
             "name": "Event",
             "code": "e",
             "type": "event",
-            "defaultValue": "2024camb",
+            "defaultValue": "2024cafr",
             "required": "true"
         },
         {
