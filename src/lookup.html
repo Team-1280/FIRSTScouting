@@ -107,46 +107,8 @@
 
         <div class="container">
             <h2>Predictions</h2>
-            <form id="alliances">
-                <div id="blueAlliance">
-                    <h3 style="text-align: center">Blue Alliance</h3>
-                    <label for="blue1">Blue 1</label>
-                    <input type="number" name="blue1" id="blue1" />
-                    <label for="blue2">Blue 2</label>
-                    <input type="number" name="blue2" id="blue2" />
-                    <label for="blue3">Blue 3</label>
-                    <input type="number" name="blue3" id="blue3" />
-                </div>
-                <div id="redAlliance">
-                    <h3 style="text-align: center">Red Alliance</h3>
-                    <label for="red1">Red 1</label>
-                    <input type="number" name="red1" id="red1" />
-                    <label for="red2">Red 2</label>
-                    <input type="number" name="red2" id="red2" />
-                    <label for="red3">Red 3</label>
-                    <input type="number" name="red3" id="red3" />
-                </div>
-                <input type="submit" value="Submit" />
-            </form>
 
-            <div class="tab">
-                <button class="tablinks active" onclick="tab(event, 'blue')">
-                    Blue Alliance
-                </button>
-                <button class="tablinks" onclick="tab(event, 'red')">
-                    Red Alliance
-                </button>
-            </div>
-
-            <div id="blue" class="tabcontent">
-                <h3>Blue Alliance</h3>
-                <div id="bluePredictions"></div>
-            </div>
-
-            <div id="red" class="tabcontent">
-                <h3>Red Alliance</h3>
-                <div id="redPredictions"></div>
-            </div>
+            <div id="Predictions"></div>
         </div>
         <script>
             document.getElementById('blue').style.display = 'block'
@@ -167,6 +129,6 @@
                 evt.currentTarget.className += ' active'
             }
         </script>
-        <script src="./analysis.js"></script>
+        <script src="./lookup.js"></script>
     </body>
 </html>

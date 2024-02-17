@@ -52,6 +52,44 @@ const server = http.createServer((req, res) => {
                 return res.end()
             })
             break
+        case '/team':
+            let teamNo = url.parse(req.url, true).query.team
+
+            let teamAverage = config_data['averages']
+
+            let lookupTeamData = {
+                team: teamNo,
+                games: [],
+                averages: {}
+            }
+
+            for (let average of teamAverage) {
+                Object.assign(lookupTeamData, {
+                    [average[0]]: []
+                })
+            }
+
+            for (let game in rawData) {
+                if (rawData[game]['t'] == teamNo) {
+                    lookupTeamData['games'].push(rawData[game])
+                }
+
+                for (let average of teamAverage) {
+                    lookupTeamData[average[0]].push(rawData[game][average[0]])
+                }
+            }
+
+            for (let average of teamAverage) {
+                lookupTeamData[average[0]] = teamData[average[0]].reduce(
+                    (a, b) => a + b
+                ) / teamData['games'].length
+            }
+
+            res.writeHead(200, { 'Content-Type': 'text/plain' })
+            res.write(JSON.stringify(lookupTeamData))
+            res.end()
+
+            break
         case '/teams':
             // Get all games with each team
             let teams = JSON.parse(url.parse(req.url, true).query.teams)
@@ -405,6 +443,30 @@ const server = http.createServer((req, res) => {
             fs.readFile('./src/picklist.js', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/javascript' })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case '/lookup.js':
+            fs.readFile('./src/lookup.js', (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { 'Content-Type': 'text/javascript' })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case '/generateLink.js':
+            fs.readFile('./src/generateLink.js', (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { 'Content-Type': 'text/javascript' })
+                res.write(data)
+                return res.end()
+            })
+            break
+        case '/lookup.html':
+            fs.readFile('./src/lookup.html', (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { 'Content-Type': 'text/html' })
                 res.write(data)
                 return res.end()
             })
