@@ -80,9 +80,9 @@ const server = http.createServer((req, res) => {
             }
 
             for (let average of teamAverage) {
-                lookupTeamData[average[0]] = teamData[average[0]].reduce(
-                    (a, b) => a + b
-                ) / teamData['games'].length
+                lookupTeamData[average[0]] =
+                    teamData[average[0]].reduce((a, b) => a + b) /
+                    teamData['games'].length
             }
 
             res.writeHead(200, { 'Content-Type': 'text/plain' })
