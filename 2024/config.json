@@ -13,13 +13,12 @@
     "keys": {
         "aas": "Amp Scores (Auton)",
         "al": "Leave Starting Zone",
-        "all": "Make good alliance partner?",
         "ass": "Speaker Scores (Auton)",
         "co": "Comments",
+        "coOp": "Coopertition Attempts",
+        "coOpA": "Coopertition Achieved?",
         "die": "Died/Immobilized",
-        "dn": "Dropped Notes",
         "dr": "Defense Rating",
-        "ds": "Driver Skill",
         "dt": "Stage Timer",
         "e": "Event",
         "fs": "Final Status",
@@ -28,7 +27,6 @@
         "nit": "Note in Trap",
         "r": "Robot",
         "s": "Scouter Initials",
-        "sr": "Speed Rating",
         "t": "Team #",
         "tas": "Amp Scores (Teleop)",
         "tip": "Tippy",
@@ -86,17 +84,6 @@
         "postmatch": [
             {
                 "choices": {
-                    "0": "Not Effective<br>",
-                    "1": "Average<br>",
-                    "2": "Very Effective<br>"
-                },
-                "code": "ds",
-                "defaultValue": "1",
-                "name": "Driver Skill",
-                "type": "radio"
-            },
-            {
-                "choices": {
                     "0": "Did not play defense",
                     "1": "Below Average<br>",
                     "2": "Average<br>",
@@ -109,19 +96,6 @@
                 "type": "radio"
             },
             {
-                "choices": {
-                    "1": "1 (slow)<br>",
-                    "2": "2<br>",
-                    "3": "3<br>",
-                    "4": "4<br>",
-                    "5": "5 (fast)"
-                },
-                "code": "sr",
-                "defaultValue": "3",
-                "name": "Speed Rating",
-                "type": "radio"
-            },
-            {
                 "code": "die",
                 "name": "Died/Immobilized",
                 "type": "bool"
@@ -129,17 +103,6 @@
             {
                 "code": "tip",
                 "name": "Tippy<br>(almost tipped over)",
-                "type": "bool"
-            },
-            {
-                "code": "dn",
-                "name": "Dropped Notes (>2)",
-                "type": "bool"
-            },
-            {
-                "code": "all",
-                "name": "Make good<br>alliance partner?",
-                "tooltip": "Would you want this robot on your alliance in eliminations?",
                 "type": "bool"
             },
             {
@@ -229,6 +192,16 @@
                 "code": "tta",
                 "name": "Times Amplified",
                 "type": "counter"
+            },
+            {
+                "code": "coOp",
+                "name": "Coopertition Attempts",
+                "type": "counter"
+            },
+            {
+                "code": "coOpA",
+                "name": "Coopertition Achieved?",
+                "type": "bool"
             }
         ],
         "title": "Scouting PASS 2024"

@@ -48,17 +48,6 @@ var config_data = `{
     "postmatch": [
         {
             "choices": {
-                "0": "Not Effective<br>",
-                "1": "Average<br>",
-                "2": "Very Effective<br>"
-            },
-            "code": "ds",
-            "defaultValue": "1",
-            "name": "Driver Skill",
-            "type": "radio"
-        },
-        {
-            "choices": {
                 "0": "Did not play defense",
                 "1": "Below Average<br>",
                 "2": "Average<br>",
@@ -71,19 +60,6 @@ var config_data = `{
             "type": "radio"
         },
         {
-            "choices": {
-                "1": "1 (slow)<br>",
-                "2": "2<br>",
-                "3": "3<br>",
-                "4": "4<br>",
-                "5": "5 (fast)"
-            },
-            "code": "sr",
-            "defaultValue": "3",
-            "name": "Speed Rating",
-            "type": "radio"
-        },
-        {
             "code": "die",
             "name": "Died/Immobilized",
             "type": "bool"
@@ -91,17 +67,6 @@ var config_data = `{
         {
             "code": "tip",
             "name": "Tippy<br>(almost tipped over)",
-            "type": "bool"
-        },
-        {
-            "code": "dn",
-            "name": "Dropped Notes (>2)",
-            "type": "bool"
-        },
-        {
-            "code": "all",
-            "name": "Make good<br>alliance partner?",
-            "tooltip": "Would you want this robot on your alliance in eliminations?",
             "type": "bool"
         },
         {
@@ -191,6 +156,16 @@ var config_data = `{
             "code": "tta",
             "name": "Times Amplified",
             "type": "counter"
+        },
+        {
+            "code": "coOp",
+            "name": "Coopertition Attempts",
+            "type": "counter"
+        },
+        {
+            "code": "coOpA",
+            "name": "Coopertition Achieved?",
+            "type": "bool"
         }
     ],
     "title": "Scouting PASS 2024"
