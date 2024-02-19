@@ -440,7 +440,7 @@ __metadata:
     serve-static: ^1.15.0
     sync-fetch: ^0.5.2
   bin:
-    scout: src/index.js
+    scout: src/dataCollector/index.js
   languageName: unknown
   linkType: soft
 

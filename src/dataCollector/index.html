@@ -37,6 +37,9 @@
             <h2>Enter Data</h2>
             <input id="data" type="text" />
             <button id="submitText">Submit</button>
+            <h2>Enter JSON</h2>
+            <input id="jsonData" type="text" />
+            <button id="submitJSON">Submit</button>
         </div>
 
         <div class="container">
@@ -159,6 +162,25 @@
             document.getElementById('bulkGen').addEventListener('click', () => {
                 window.location.href = '/bulk'
             })
+
+            document
+                .getElementById('submitJSON')
+                .addEventListener('click', async () => {
+                    const data = document.getElementById('jsonData').value
+
+                    // Send the data to the server
+                    const baseUrl = `http://${
+                        window.location.host.split(':')[0] || 'localhost'
+                    }:3000/jsonDataRecieve`
+
+                    const finalUrl = `${baseUrl}?data=${encodeURIComponent(
+                        JSON.stringify(JSON.parse(data))
+                    )}`
+
+                    // Send the data to the server
+                    console.log(finalUrl)
+                    fetch(finalUrl)
+                })
         </script>
     </body>
 </html>

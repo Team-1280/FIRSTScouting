@@ -2,9 +2,9 @@
     "name": "FIRSTScouting",
     "version": "1.0.0",
     "description": "FIRST Scouting Application for Team 1280",
-    "main": "src/index.js",
+    "main": "src/dataCollector/index.js",
     "bin": {
-        "scout": "src/index.js"
+        "scout": "src/dataCollector/index.js"
     },
     "author": "<npm.quantalabs@gmail.com>",
     "license": "GPL-3.0-or-later",

@@ -1,4 +1,4 @@
 dist/
 .yarn/
 pass/
-src/*.min.js
+src/**/*.min.js

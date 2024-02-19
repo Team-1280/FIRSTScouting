@@ -24,7 +24,7 @@ const server = http.createServer((req, res) => {
 
     switch (urlPath) {
         case '/':
-            fs.readFile('./src/index.html', (err, data) => {
+            fs.readFile('./src/dataCollector/index.html', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/html' })
                 res.write(data)
@@ -45,7 +45,7 @@ const server = http.createServer((req, res) => {
             res.end()
             break
         case '/view':
-            fs.readFile('./src/view.html', (err, data) => {
+            fs.readFile('./src/dataCollector/view.html', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/html' })
                 res.write(data)
@@ -235,7 +235,7 @@ const server = http.createServer((req, res) => {
             res.end(JSON.stringify(teamData))
             break
         case '/analysis':
-            fs.readFile('./src/analysis.html', (err, data) => {
+            fs.readFile('./src/dataCollector/analysis.html', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/html' })
                 res.write(data)
@@ -358,7 +358,7 @@ const server = http.createServer((req, res) => {
             res.end(JSON.stringify(picklistData))
             break
         case '/picklist':
-            fs.readFile('./src/picklist.html', (err, data) => {
+            fs.readFile('./src/dataCollector/picklist.html', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/html' })
                 res.write(data)
@@ -391,8 +391,25 @@ const server = http.createServer((req, res) => {
                 res.end()
             })
             break
+        case '/jsonDataRecieve':
+            let recieveData = JSON.parse(url.parse(req.url, true).query.data)
+
+            // Add data to rawData
+            for (let row in recieveData) {
+                rawData[Object.keys(rawData).length.toString()] =
+                    recieveData[row]
+            }
+
+            fs.writeFileSync(
+                config_data['data'],
+                JSON.stringify(rawData, null, 2)
+            )
+
+            res.writeHead(200, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ success: true }))
+            break
         case '/sortable.min.js':
-            fs.readFile('./src/sortable.min.js', (err, data) => {
+            fs.readFile('./src/dataCollector/sortable.min.js', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/javascript' })
                 res.write(data)
@@ -400,7 +417,7 @@ const server = http.createServer((req, res) => {
             })
             break
         case '/view.js':
-            fs.readFile('./src/view.js', (err, data) => {
+            fs.readFile('./src/dataCollector/view.js', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/javascript' })
                 res.write(data)
@@ -408,7 +425,7 @@ const server = http.createServer((req, res) => {
             })
             break
         case '/C-Biscuit.png':
-            fs.readFile('./src/C-Biscuit.png', (err, data) => {
+            fs.readFile('./src/dataCollector/C-Biscuit.png', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'image/png' })
                 res.write(data)
@@ -416,7 +433,7 @@ const server = http.createServer((req, res) => {
             })
             break
         case '/water.css':
-            fs.readFile('./src/water.css', (err, data) => {
+            fs.readFile('./src/dataCollector/water.css', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/css' })
                 res.write(data)
@@ -424,15 +441,18 @@ const server = http.createServer((req, res) => {
             })
             break
         case '/html5-qrcode.min.js':
-            fs.readFile('./src/html5-qrcode.min.js', (err, data) => {
-                if (err) throw err
-                res.writeHead(200, { 'Content-Type': 'text/js' })
-                res.write(data)
-                return res.end()
-            })
+            fs.readFile(
+                './src/dataCollector/html5-qrcode.min.js',
+                (err, data) => {
+                    if (err) throw err
+                    res.writeHead(200, { 'Content-Type': 'text/js' })
+                    res.write(data)
+                    return res.end()
+                }
+            )
             break
         case '/analysis.js':
-            fs.readFile('./src/analysis.js', (err, data) => {
+            fs.readFile('./src/dataCollector/analysis.js', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/javascript' })
                 res.write(data)
@@ -440,7 +460,7 @@ const server = http.createServer((req, res) => {
             })
             break
         case '/picklist.js':
-            fs.readFile('./src/picklist.js', (err, data) => {
+            fs.readFile('./src/dataCollector/picklist.js', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/javascript' })
                 res.write(data)
@@ -448,7 +468,7 @@ const server = http.createServer((req, res) => {
             })
             break
         case '/lookup.js':
-            fs.readFile('./src/lookup.js', (err, data) => {
+            fs.readFile('./src/dataCollector/lookup.js', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/javascript' })
                 res.write(data)
@@ -456,7 +476,7 @@ const server = http.createServer((req, res) => {
             })
             break
         case '/generateLink.js':
-            fs.readFile('./src/generateLink.js', (err, data) => {
+            fs.readFile('./src/dataCollector/generateLink.js', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/javascript' })
                 res.write(data)
@@ -464,7 +484,7 @@ const server = http.createServer((req, res) => {
             })
             break
         case '/lookup.html':
-            fs.readFile('./src/lookup.html', (err, data) => {
+            fs.readFile('./src/dataCollector/lookup.html', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/html' })
                 res.write(data)
@@ -492,6 +512,17 @@ const scoutingPASSServer = http.createServer(function (req, res) {
     serve(req, res, done)
 })
 
+const offlineviewer = serveStatic('./src/offlineViewer/')
+
+const offlineViewerServer = http.createServer(function (req, res) {
+    const done = finalhandler(req, res)
+    offlineviewer(req, res, done)
+})
+
 scoutingPASSServer.listen(8000, host, () => {
     console.log(`Scouting P.A.S.S. Server running at http://${host}:8000/`)
+})
+
+offlineViewerServer.listen(1280, host, () => {
+    console.log(`Offline Viewer Server running at http://${host}:1280/`)
 })

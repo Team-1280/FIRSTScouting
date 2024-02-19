@@ -1,0 +1,17 @@
+{
+    "name": "Offline Scouting Data Viewer",
+    "short_name": "Data Viewer",
+    "description": "FRC Scouting Data Viewer for Data in Local Storage",
+    "start_url": "/",
+    "id": "/",
+    "icons": [
+        {
+            "src": "/C-Biscuit.png",
+            "sizes": "48x48",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone"
+}

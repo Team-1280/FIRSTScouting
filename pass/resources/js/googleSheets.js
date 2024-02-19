@@ -1,9 +1,13 @@
+const { json } = require("stream/consumers");
+
 function setUpGoogleSheets() {
     const scriptURL = `http://${
         window.location.hostname.split(":")[0]
     }:3000/data`
     const form = document.querySelector("#scoutingForm")
     const btn = document.querySelector("#submit")
+
+    const recieverWindow = document.querySelector("#reciever").contentWindow;
 
     form.addEventListener("submit", (e) => {
         e.preventDefault()
@@ -27,9 +31,9 @@ function setUpGoogleSheets() {
             mode: "no-cors"
         })
 
-        console.log(fd)
-
         btn.disabled = false
         btn.innerHTML = "Send to Database"
+
+        recieverWindow.postMessage(JSON.stringify(parsedData), "http://localhost:1280/")
     })
 }
