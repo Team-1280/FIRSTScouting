@@ -325,7 +325,7 @@ const server = http.createServer((req, res) => {
                 let avg = picklistData['teams'][rawData[game]['t']]
                     ? picklistData['teams'][rawData[game]['t']]['avg']
                     : {}
-                for (let weight of Object.keys(config_data['picklist'])) {
+                for (let weight of picklistData['weights']) {
                     gameData[weight] = rawData[game][weight]
 
                     avg[weight] =
