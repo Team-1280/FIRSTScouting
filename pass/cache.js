@@ -45,6 +45,8 @@ var assets = [
   './2023/field_image.png',
   './2023/grid_image_alt.png',
   './2023/grid_image.png',
+  './2024/CU_config.js',
+  './2024/CU_Pit_config.js',
   './android-chrome-192x192.png',
   './android-chrome-512x512.png',
   './favicon-32x32.png',
@@ -57,3 +59,43 @@ cacheAssets(assets)
   .then(() => {
     console.log('Cache sync complete')
   })
+
+
+if ('serviceWorker' in navigator && 'PushManager' in window) {
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+
+    const deferredPrompt = e;
+
+    const installButton = document.createElement('button');
+    installButton.textContent = 'Install App';
+    installButton.style.position = 'fixed';
+    installButton.style.top = '10px';
+    installButton.style.left = '50%';
+    installButton.style.transform = 'translateX(-50%)';
+    installButton.style.zIndex = '9999';
+    installButton.style.padding = '10px 20px';
+    installButton.classList.add('btn-grad');
+    installButton.style.color = 'white';
+    installButton.style.border = 'none';
+    installButton.style.borderRadius = '5px';
+    installButton.style.cursor = 'pointer';
+
+    installButton.addEventListener('click', () => {
+
+      deferredPrompt.prompt();
+
+      deferredPrompt.userChoice.then(choiceResult => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('App installed');
+        } else {
+          console.log('App installation declined');
+        }
+
+        installButton.style.display = 'none';
+      });
+    });
+
+    document.body.appendChild(installButton);
+  });
+}

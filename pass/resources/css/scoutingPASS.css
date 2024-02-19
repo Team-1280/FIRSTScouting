@@ -288,3 +288,9 @@ table {
     display: inline-block;
     width: 50px;
 }
+
+#start_dt,
+.timer,
+#clear_dt {
+    margin: auto;
+}

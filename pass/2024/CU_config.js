@@ -25,13 +25,13 @@ var config_data = `{
         },
         {
             "choices": {
-                "0": "Not attempted",
+                "0": "Not attempted<br>",
                 "1": "Attempted but failed<br>",
                 "2": "Parked<br>",
                 "3": "Onstage<br>",
                 "4": "Onstage (Spotlit)<br>",
                 "5": "Harmony<br>",
-                "6": "Harmony (Spotlit)<br>"
+                "6": "Harmony (Spotlit)"
             },
             "code": "fs",
             "defaultValue": "x",
@@ -48,7 +48,7 @@ var config_data = `{
     "postmatch": [
         {
             "choices": {
-                "0": "Did not play defense",
+                "0": "Did not play defense<br>",
                 "1": "Below Average<br>",
                 "2": "Average<br>",
                 "3": "Good<br>",
@@ -101,9 +101,9 @@ var config_data = `{
         },
         {
             "choices": {
-                "f": "Finals",
                 "qm": "Quals<br>",
-                "sf": "Semifinals<br>"
+                "sf": "Semifinals<br>",
+                "f": "Finals"
             },
             "code": "l",
             "defaultValue": "qm",
@@ -121,12 +121,12 @@ var config_data = `{
         },
         {
             "choices": {
-                "b1": "Blue-1<br>",
-                "b2": "Blue-2<br>",
-                "b3": "Blue-3",
                 "r1": "Red-1",
+                "b1": "Blue-1<br>",
                 "r2": "Red-2",
-                "r3": "Red-3"
+                "b2": "Blue-2<br>",
+                "r3": "Red-3",
+                "b3": "Blue-3"
             },
             "code": "r",
             "name": "Robot",
