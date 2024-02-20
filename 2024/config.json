@@ -11,6 +11,7 @@
         "Team #"
     ],
     "keys": {
+        "a": "Autonomous Routine?",
         "aas": "Amp Scores (Auton)",
         "al": "Leave Starting Zone",
         "ass": "Speaker Scores (Auton)",
@@ -39,6 +40,11 @@
             {
                 "code": "al",
                 "name": "Leave Starting Zone",
+                "type": "bool"
+            },
+            {
+                "code": "a",
+                "name": "Autonomous Routine?",
                 "type": "bool"
             },
             {

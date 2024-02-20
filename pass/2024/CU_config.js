@@ -6,6 +6,11 @@ var config_data = `{
             "type": "bool"
         },
         {
+            "code": "a",
+            "name": "Autonomous Routine?",
+            "type": "bool"
+        },
+        {
             "code": "aas",
             "name": "Amp Scores",
             "type": "counter"
