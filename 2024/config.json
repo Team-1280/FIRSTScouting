@@ -1,15 +1,7 @@
 {
     "averages": ["Score"],
     "data": "./2024/data.json",
-    "headers": [
-        "Bulk Export",
-        "Event",
-        "Level",
-        "Match #",
-        "Robot",
-        "Scouter Initials",
-        "Team #"
-    ],
+    "headers": ["Bulk Export", "Match #", "Scouter Initials", "Team #"],
     "keys": {
         "a": "Autonomous Routine?",
         "aas": "Amp Scores (Auton)",
