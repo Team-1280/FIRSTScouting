@@ -80,13 +80,6 @@ var config_data = `{
             "type": "bool"
         },
         {
-            "code": "aut",
-            "maxSize": 250,
-            "name": "Autos",
-            "size": 20,
-            "type": "text"
-        },
-        {
             "code": "co",
             "maxSize": 250,
             "name": "Comments",
