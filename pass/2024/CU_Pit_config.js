@@ -27,9 +27,9 @@ var config_data = `{
             "choices": {
                 "b": "Butterfly/Grashopper<br>",
                 "m": "Mechanum<br>",
-                "o": "Other",
                 "s": "Swerve<br>",
-                "w": "West Coast/Tank<br>"
+                "w": "West Coast/Tank<br>",
+                "o": "Other"
             },
             "code": "drv",
             "defaultValue": "o",
