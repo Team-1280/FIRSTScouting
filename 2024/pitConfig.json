@@ -116,7 +116,7 @@
     },
     "PASSConfigPath": "./pass/2024/CU_Pit_config.js",
     "picklist": {},
-    "picklistFile": "./2024/picklist.json",
+    "picklistFile": "./2024/picklistPit.json",
     "stages": ["auton", "endgame", "postmatch", "prematch", "teleop"],
     "weights": {}
 }
