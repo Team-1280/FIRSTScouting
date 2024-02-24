@@ -1,5 +1,3 @@
-const { json } = require("stream/consumers");
-
 function setUpGoogleSheets() {
     const scriptURL = `http://${
         window.location.hostname.split(":")[0]
