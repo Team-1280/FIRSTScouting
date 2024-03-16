@@ -32,6 +32,6 @@ function setUpGoogleSheets() {
         btn.disabled = false
         btn.innerHTML = "Send to Database"
 
-        recieverWindow.postMessage(JSON.stringify(parsedData), "http://localhost:1280/")
+        recieverWindow.postMessage(JSON.stringify(parsedData), "http://1280scoutinglocal.vercel.app")
     })
 }
