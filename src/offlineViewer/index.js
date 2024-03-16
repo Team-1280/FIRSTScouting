@@ -1,6 +1,7 @@
 window.onload = function () {
     function receiveMessage(e) {
-        if (e.origin !== `http://${window.location.host.split(':')[0]}:8000`)
+        if (e.origin !== `http://${window.location.host.split(':')[0]}:8000`
+            || e.origin !== `https://1280scouting.vercel.app/`)
             return
 
         let data = JSON.parse(e.data)
