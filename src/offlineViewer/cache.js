@@ -38,6 +38,7 @@ var assets = [
     './index.js',
     './site.webmanifest',
     './sw.js',
+    './html5-qrcode.min.js',
     '/'
 ]
 
