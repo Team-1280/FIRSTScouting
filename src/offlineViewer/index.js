@@ -46,6 +46,12 @@ if (pitData) {
 
 function displayData(data, tableID) {
     let table = document.getElementById(tableID)
+
+    // Empty the table
+    while (table.firstChild) {
+        table.removeChild(table.firstChild)
+    }
+
     let rows = data.split('\n')
     for (let row of rows) {
         let cells = row.split(',')
@@ -105,4 +111,73 @@ document.getElementById('showPitDataJSON').addEventListener('click', () => {
         null,
         2
     )
+})
+
+function onScanSuccess(decodedText, decodedResult) {
+    const data = decodedText
+
+    // Split the data into individual key-value pairs
+    const pairs = data.split(';')
+
+    // Create an object to store the parsed key-value pairs
+    const parsedData = {}
+    pairs.forEach((pair) => {
+        const [key, value] = pair.split('=').length == 1 ? [pair, true] : pair.split('=')
+        parsedData[key] = value
+    })
+
+    // Add the parsed data to the local storage
+    let fieldData = localStorage.getItem('fieldData') ? localStorage.getItem('fieldData').split('\n') : []
+
+    for (let row in fieldData) {
+        fieldData[row] = fieldData[row].split(',')
+    }
+    let header = fieldData.shift()
+    let JSONData = {}
+
+    for (let row in fieldData) {
+        let data = {}
+        for (let cell in fieldData[row]) {
+            data[header[cell]] = fieldData[row][cell]
+        }
+        JSONData[row] = data
+    }
+
+    JSONData[JSONData.length] = parsedData
+    
+    let existingData = localStorage.getItem('fieldData')
+
+    if (existingData) existingData = existingData.split('\n') 
+    else existingData = []
+
+    for (let row in existingData) {
+        existingData[row] = existingData[row].split(',')
+    }
+
+    let newRow = []
+    let headerRow = []
+
+    for (let key in parsedData) {
+        newRow.push(parsedData[key])
+        headerRow.push(key)
+    }
+
+    if (headerRow != existingData[0]) existingData[0] = headerRow
+
+    existingData.push(newRow.join(','))
+
+    localStorage.setItem('fieldData', existingData.join('\n'))
+
+    displayData(localStorage.getItem('fieldData'), 'fieldScouting')
+}
+
+document.getElementById('start').addEventListener('click', () => {
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+        'reader',
+        { fps: 10, qrbox: { width: 250, height: 250 } },
+        false
+    )
+    html5QrcodeScanner.render(onScanSuccess, () => {return;})
+
+    document.getElementById('start').style.display = 'none'
 })

@@ -1,53 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Local Data Viewer</title>
-        <link rel="manifest" href="/site.webmanifest" />
-        <link rel="stylesheet" href="./water.css" />
-        <style>
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 20px;
-                border: 1px solid #ccc;
-            }
 
-            th,
-            td {
-                padding: 8px;
-                text-align: left;
-                border: 1px solid;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Local Data Viewer</h1>
-        <p>
-            Warning: Do not clear local storage/cache, as you will lose all your
-            scouting data. Get your data scanned as soon as possible.
-        </p>
-        <button id="showFieldDataJSON">Create Field Scouting Bulk</button>
-        <div id="fieldDataJSON"></div>
-        <button id="showPitDataJSON">Create Pit Scouting Bulk</button>
-        <div id="pitDataJSON"></div>
-        <h3>Field Scouting Data</h3>
-        <table id="fieldScouting"></table>
-        <h3>Pit Scouting Data</h3>
-        <table id="pitScouting"></table>
-        <script src="./cache.js"></script>
-        <script src="./index.js" type="module"></script>
-        <script>
-            navigator.serviceWorker &&
-                navigator.serviceWorker
-                    .register('./sw.js')
-                    .then(function (registration) {
-                        console.log(
-                            'Excellent, registered with scope: ',
-                            registration.scope
-                        )
-                    })
-        </script>
-    </body>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Local Data Viewer</title>
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="stylesheet" href="./water.css" />
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Local Data Viewer</h1>
+    <p>
+        Warning: Do not clear local storage/cache, as you will lose all your
+        scouting data. Get your data scanned as soon as possible.
+    </p>
+    <div class="container">
+        <button id="start">Scan</button>
+        <div id="reader"></div>
+    </div>
+    <button id="showFieldDataJSON">Create Field Scouting Bulk</button>
+    <div id="fieldDataJSON"></div>
+    <button id="showPitDataJSON">Create Pit Scouting Bulk</button>
+    <div id="pitDataJSON"></div>
+    <h3>Field Scouting Data</h3>
+    <table id="fieldScouting"></table>
+    <h3>Pit Scouting Data</h3>
+    <table id="pitScouting"></table>
+    <script src="./cache.js"></script>
+    <script src="./html5-qrcode.min.js"></script>
+    <script src="./index.js" type="module"></script>
+    <script>
+        navigator.serviceWorker &&
+            navigator.serviceWorker
+                .register('./sw.js')
+                .then(function (registration) {
+                    console.log(
+                        'Excellent, registered with scope: ',
+                        registration.scope
+                    )
+                })
+    </script>
+</body>
+
 </html>
