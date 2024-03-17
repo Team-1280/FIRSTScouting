@@ -1,7 +1,9 @@
 window.onload = function () {
     function receiveMessage(e) {
-        if (e.origin !== `http://${window.location.host.split(':')[0]}:8000`
-            || e.origin !== `https://1280scouting.vercel.app/`)
+        if (
+            e.origin !== `http://${window.location.host.split(':')[0]}:8000` ||
+            e.origin !== `https://1280scouting.vercel.app/`
+        )
             return
 
         let data = JSON.parse(e.data)
@@ -122,12 +124,15 @@ function onScanSuccess(decodedText, decodedResult) {
     // Create an object to store the parsed key-value pairs
     const parsedData = {}
     pairs.forEach((pair) => {
-        const [key, value] = pair.split('=').length == 1 ? [pair, true] : pair.split('=')
+        const [key, value] =
+            pair.split('=').length == 1 ? [pair, true] : pair.split('=')
         parsedData[key] = value
     })
 
     // Add the parsed data to the local storage
-    let fieldData = localStorage.getItem('fieldData') ? localStorage.getItem('fieldData').split('\n') : []
+    let fieldData = localStorage.getItem('fieldData')
+        ? localStorage.getItem('fieldData').split('\n')
+        : []
 
     for (let row in fieldData) {
         fieldData[row] = fieldData[row].split(',')
@@ -144,10 +149,10 @@ function onScanSuccess(decodedText, decodedResult) {
     }
 
     JSONData[JSONData.length] = parsedData
-    
+
     let existingData = localStorage.getItem('fieldData')
 
-    if (existingData) existingData = existingData.split('\n') 
+    if (existingData) existingData = existingData.split('\n')
     else existingData = []
 
     for (let row in existingData) {
@@ -177,7 +182,9 @@ document.getElementById('start').addEventListener('click', () => {
         { fps: 10, qrbox: { width: 250, height: 250 } },
         false
     )
-    html5QrcodeScanner.render(onScanSuccess, () => {return;})
+    html5QrcodeScanner.render(onScanSuccess, () => {
+        return
+    })
 
     document.getElementById('start').style.display = 'none'
 })
