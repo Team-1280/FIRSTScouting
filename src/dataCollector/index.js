@@ -483,7 +483,7 @@ const server = http.createServer((req, res) => {
                 return res.end()
             })
             break
-        case '/lookup.html':
+        case '/lookup':
             fs.readFile('./src/dataCollector/lookup.html', (err, data) => {
                 if (err) throw err
                 res.writeHead(200, { 'Content-Type': 'text/html' })
