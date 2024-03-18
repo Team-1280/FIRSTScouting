@@ -200,9 +200,9 @@ function download(filename, text) {
 }
 
 document.getElementById('exportPit').addEventListener('click', () => {
-    download('fieldScouting.tsv', localStorage.getItem('fieldData'))
+    download('pitScouting.csv', localStorage.getItem('pitData'))
 })
 
 document.getElementById('exportField').addEventListener('click', () => {
-    download('pitScouting.tsv', localStorage.getItem('pitData'))
+    download('fieldScouting.csv', localStorage.getItem('fieldData'))
 })
