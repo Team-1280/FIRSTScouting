@@ -21,13 +21,13 @@ function setUpGoogleSheets() {
       })
 
         // URL encode the parsed data
-        const fd = new URLSearchParams(
-            parsedData
-        ).toString()
+        // const fd = new URLSearchParams(
+        //     parsedData
+        // ).toString()
         
-        fetch(scriptURL + "?" + fd, {
-            mode: "no-cors"
-        })
+        // fetch(scriptURL + "?" + fd, {
+        //     mode: "no-cors"
+        // })
 
         btn.disabled = false
         btn.innerHTML = "Send to Database"
