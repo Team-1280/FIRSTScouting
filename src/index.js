@@ -512,17 +512,6 @@ const scoutingPASSServer = http.createServer(function (req, res) {
     serve(req, res, done)
 })
 
-const offlineviewer = serveStatic('./src/offlineViewer/')
-
-const offlineViewerServer = http.createServer(function (req, res) {
-    const done = finalhandler(req, res)
-    offlineviewer(req, res, done)
-})
-
 scoutingPASSServer.listen(8000, host, () => {
     console.log(`Scouting P.A.S.S. Server running at http://${host}:8000/`)
-})
-
-offlineViewerServer.listen(1280, host, () => {
-    console.log(`Offline Viewer Server running at http://${host}:1280/`)
 })
