@@ -51,6 +51,9 @@ var assets = [
   './android-chrome-512x512.png',
   './favicon-32x32.png',
   './favicon-16x16.png',
+  './offline/index.html',
+  './offline/index.js',
+  './offline/html5-qrcode.min.js',
   '/'
 ]
 

@@ -4,8 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Local Data Viewer</title>
-        <link rel="manifest" href="/site.webmanifest" />
-        <link rel="stylesheet" href="./water.css" />
+        <link rel="stylesheet" href="../resources/css/water.css" />
         <style>
             table {
                 width: 100%;
@@ -25,6 +24,7 @@
 
     <body>
         <h1>Local Data Viewer</h1>
+        <h4><a href="/">Home</a></h4>
         <p>
             Warning: Do not clear local storage/cache, as you will lose all your
             scouting data. Get your data scanned as soon as possible.
@@ -43,19 +43,7 @@
         <table id="fieldScouting"></table>
         <h3>Pit Scouting Data</h3>
         <table id="pitScouting"></table>
-        <script src="./cache.js"></script>
         <script src="./html5-qrcode.min.js"></script>
         <script src="./index.js" type="module"></script>
-        <script>
-            navigator.serviceWorker &&
-                navigator.serviceWorker
-                    .register('./sw.js')
-                    .then(function (registration) {
-                        console.log(
-                            'Excellent, registered with scope: ',
-                            registration.scope
-                        )
-                    })
-        </script>
     </body>
 </html>
