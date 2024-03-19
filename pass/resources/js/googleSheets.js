@@ -5,8 +5,6 @@ function setUpGoogleSheets() {
     const form = document.querySelector("#scoutingForm")
     const btn = document.querySelector("#submit")
 
-    const recieverWindow = document.querySelector("#reciever").contentWindow;
-
     form.addEventListener("submit", (e) => {
         e.preventDefault()
         btn.disabled = true
@@ -32,6 +30,28 @@ function setUpGoogleSheets() {
         btn.disabled = false
         btn.innerHTML = "Send to Database"
 
-        recieverWindow.postMessage(JSON.stringify(parsedData), "http://1280scoutinglocal.vercel.app")
+        // Add the parsed data to the local storage
+        let existingData = localStorage.getItem('fieldData')
+
+        if (existingData) {
+            existingData = existingData.split('\n')
+
+            for (let row in existingData)
+                existingData[row] = existingData[row].split(',')
+        }
+        if (!existingData) existingData = [[]]
+
+        let header = []
+        let newRow = []
+
+        for (let row of Object.keys(parsedData)) {
+            header.push(row)
+            newRow.push(parsedData[row])
+        }
+
+        if (header != existingData[0]) existingData[0] = header
+        existingData.push(newRow.join(','))
+
+        localStorage.setItem('fieldData', existingData.join('\n'))
     })
 }

@@ -1,32 +1,3 @@
-window.onload = function () {
-    function receiveMessage(e) {
-        let data = JSON.parse(e.data)
-        let existingData = localStorage.getItem('fieldData')
-
-        if (existingData) {
-            existingData = existingData.split('\n')
-
-            for (let row in existingData)
-                existingData[row] = existingData[row].split(',')
-        }
-        if (!existingData) existingData = [[]]
-
-        let header = []
-        let newRow = []
-
-        for (let row of Object.keys(data)) {
-            header.push(row)
-            newRow.push(data[row])
-        }
-
-        if (header != existingData[0]) existingData[0] = header
-        existingData.push(newRow.join(','))
-
-        localStorage.setItem('fieldData', existingData.join('\n'))
-    }
-    window.addEventListener('message', receiveMessage)
-}
-
 // Load CSV data from local storage and display it in a table
 let fieldData = localStorage.getItem('fieldData')
 
