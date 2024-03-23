@@ -1,14 +1,7 @@
 {
-    "averages": [
-        "Score"
-    ],
+    "averages": ["Score"],
     "data": "./2024/data.json",
-    "headers": [
-        "Bulk Export",
-        "Match #",
-        "Scouter Initials",
-        "Team #"
-    ],
+    "headers": ["Bulk Export", "Match #", "Scouter Initials", "Team #"],
     "keys": {
         "a": "Autonomous Routine?",
         "aas": "Amp Scores (Auton)",
@@ -212,21 +205,12 @@
         "title": "Scouting PASS 2024"
     },
     "PASSConfigPath": "./pass/2024/CU_config.js",
-    "stages": [
-        "auton",
-        "endgame",
-        "postmatch",
-        "prematch",
-        "teleop"
-    ],
+    "stages": ["auton", "endgame", "postmatch", "prematch", "teleop"],
     "weights": {
         "Score": 1
     },
     "picklist": {
-        "ts": [
-            0,
-            1
-        ]
+        "ts": [0, 1]
     },
     "picklistFile": "./2024/picklist.json"
 }

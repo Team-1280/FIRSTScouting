@@ -441,15 +441,12 @@ const server = http.createServer((req, res) => {
             })
             break
         case '/html5-qrcode.min.js':
-            fs.readFile(
-                './src/html5-qrcode.min.js',
-                (err, data) => {
-                    if (err) throw err
-                    res.writeHead(200, { 'Content-Type': 'text/js' })
-                    res.write(data)
-                    return res.end()
-                }
-            )
+            fs.readFile('./src/html5-qrcode.min.js', (err, data) => {
+                if (err) throw err
+                res.writeHead(200, { 'Content-Type': 'text/js' })
+                res.write(data)
+                return res.end()
+            })
             break
         case '/analysis.js':
             fs.readFile('./src/analysis.js', (err, data) => {

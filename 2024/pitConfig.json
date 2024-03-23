@@ -1,11 +1,7 @@
 {
     "averages": [],
     "data": "./2024/pit.json",
-    "headers": [
-        "Bulk Export",
-        "Team Number",
-        "Comments"
-    ],
+    "headers": ["Bulk Export", "Team Number", "Comments"],
     "keys": {
         "co": "Comments",
         "drv": "Drivetrain",
@@ -113,12 +109,6 @@
     "PASSConfigPath": "./pass/2024/CU_Pit_config.js",
     "picklist": {},
     "picklistFile": "./2024/picklistPit.json",
-    "stages": [
-        "auton",
-        "endgame",
-        "postmatch",
-        "prematch",
-        "teleop"
-    ],
+    "stages": ["auton", "endgame", "postmatch", "prematch", "teleop"],
     "weights": {}
 }
