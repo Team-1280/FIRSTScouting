@@ -3,12 +3,8 @@
     "data": "./2024/pit.json",
     "headers": [
         "Bulk Export",
-        "Event",
-        "Level",
-        "Match #",
-        "Robot",
-        "Scouter Initials",
-        "Team #"
+        "Team Number",
+        "Comments"
     ],
     "keys": {
         "co": "Comments",
@@ -117,6 +113,12 @@
     "PASSConfigPath": "./pass/2024/CU_Pit_config.js",
     "picklist": {},
     "picklistFile": "./2024/picklistPit.json",
-    "stages": ["auton", "endgame", "postmatch", "prematch", "teleop"],
+    "stages": [
+        "auton",
+        "endgame",
+        "postmatch",
+        "prematch",
+        "teleop"
+    ],
     "weights": {}
 }

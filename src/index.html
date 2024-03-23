@@ -71,7 +71,8 @@
                 const finalUrl = `${baseUrl}?${encodedData}`
 
                 // Send the data to the server
-                fetch(finalUrl)
+                await fetch(finalUrl)
+                console.log('sending data ' + finalUrl)
 
                 // Send user to /view
                 window.location.href = '/view'
