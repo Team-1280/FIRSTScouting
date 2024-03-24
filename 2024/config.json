@@ -1,7 +1,8 @@
 {
     "averages": ["Score"],
     "data": "./2024/data.json",
-    "headers": ["Bulk Export", "Match #", "Scouter Initials", "Team #"],
+    "headers": ["Team #", "Amp Scores (Auton)", "Amp Scores (Teleop)", 
+"Speaker Scores (Auton)", "Speaker Scores (Teleop)", "Final Status", "Note in Trap", "Tippy", "Comments"],
     "keys": {
         "a": "Autonomous Routine?",
         "aas": "Amp Scores (Auton)",
