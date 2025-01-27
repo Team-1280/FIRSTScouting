@@ -11,14 +11,14 @@ function retrieveLogs(url, header) {
 }
 
 let cvrTeams = retrieveLogs(
-    'https://www.thebluealliance.com/api/v3/event/2024cafr/teams',
+    'https://www.thebluealliance.com/api/v3/event/2025cafr/teams',
     {
         'X-TBA-Auth-Key': process.env.blueAllianceAPIKey
     }
 )
 
 let cambTeams = retrieveLogs(
-    'https://www.thebluealliance.com/api/v3/event/2024camb/teams',
+    'https://www.thebluealliance.com/api/v3/event/2025camb/teams',
     {
         'X-TBA-Auth-Key': process.env.blueAllianceAPIKey
     }
@@ -28,7 +28,7 @@ let teamsWithMatchesPlayed = []
 
 for (let team of cvrTeams) {
     let comps = retrieveLogs(
-        `https://www.thebluealliance.com/api/v3/team/${team['key']}/events/2024/statuses`,
+        `https://www.thebluealliance.com/api/v3/team/${team['key']}/events/2025/statuses`,
         {
             'X-TBA-Auth-Key': process.env.blueAllianceAPIKey
         }
@@ -51,7 +51,7 @@ for (let team of cvrTeams) {
 
 for (let team of cambTeams) {
     let comps = retrieveLogs(
-        `https://www.thebluealliance.com/api/v3/team/${team['key']}/events/2024/statuses`,
+        `https://www.thebluealliance.com/api/v3/team/${team['key']}/events/2025/statuses`,
         {
             'X-TBA-Auth-Key': process.env.blueAllianceAPIKey
         }
