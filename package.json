@@ -40,7 +40,7 @@
         "brotli-wasm": "^2.0.1",
         "finalhandler": "^1.2.0",
         "qrcode": "^1.5.3",
-        "serve-static": "^1.15.0",
+        "serve-static": "^1.16.0",
         "sync-fetch": "^0.5.2"
     }
 }
